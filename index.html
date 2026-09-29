@@ -1,11 +1,4 @@
 <!DOCTYPE html>
-<!--
-  ★ Formspree 설정 방법 (상담 신청 내역을 이메일로 받으려면 필수)
-  1. https://formspree.io 무료 가입
-  2. New Form 만들기 → Endpoint URL 확인 (예: https://formspree.io/f/maylwkzd)
-  3. 아래 스크립트의 YOUR_FORM_ID 를 복사한 ID로 교체
-  4. 첫 신청이 들어오면 Formspree에서 확인 메일이 옴 → Activate 꼭 클릭! (안 하면 메일 안 옴)
--->
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
@@ -39,9 +32,7 @@
     .hint { margin: 0 0 20px; color: var(--muted); font-size: 15px; }
     .hero { text-align: center; padding: 36px 0 8px; }
     .hero-photo { display: flex; justify-content: center; margin-bottom: 20px; }
-    .photo-placeholder { width: 120px; height: 120px; border-radius: 50%; background: var(--blue-050); border: 3px solid var(--white); box-shadow: var(--shadow); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--blue-500); gap: 4px; overflow: hidden; }
-    .photo-placeholder span { font-size: 30px; }
-    .photo-placeholder small { font-size: 11px; color: var(--muted); }
+    .photo-placeholder { width: 120px; height: 120px; border-radius: 50%; background: var(--blue-050); border: 3px solid var(--white); box-shadow: var(--shadow); display: flex; align-items: center; justify-content: center; overflow: hidden; }
     .photo-placeholder img { width: 100%; height: 100%; object-fit: cover; }
     .eyebrow { color: var(--blue-600); font-weight: 700; font-size: 14px; letter-spacing: .5px; margin: 0 0 8px; }
     .hero h1 { font-size: 30px; line-height: 1.3; margin: 0 0 16px; }
@@ -58,7 +49,6 @@
     .service-card p { margin: 0; font-size: 13px; color: var(--muted); }
     .field { margin-bottom: 14px; }
     .field label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 15px; }
-    .field label .opt { font-weight: 400; color: var(--muted); font-size: 13px; }
     input[type="text"], input[type="tel"], input[type="email"] { width: 100%; padding: 14px 16px; border: 1.5px solid var(--line); border-radius: 10px; font-size: 16px; outline: none; transition: border-color .2s, box-shadow .2s; }
     input:focus { border-color: var(--blue-500); box-shadow: 0 0 0 3px var(--blue-050); }
     .error { color: var(--red); font-size: 13px; min-height: 18px; margin: 6px 0 0; }
@@ -75,7 +65,6 @@
     .field.checkbox input { margin-top: 3px; }
     .btn { border: none; border-radius: 10px; padding: 14px 22px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform .08s, background .2s; }
     .btn:active { transform: translateY(1px); }
-    .btn:disabled { opacity: .6; cursor: wait; }
     .btn-primary { background: var(--blue-500); color: #fff; }
     .btn-primary:hover { background: var(--blue-600); }
     .btn-ghost { background: transparent; color: var(--muted); }
@@ -131,11 +120,10 @@
     <section class="step" id="step-landing" data-step="landing">
       <div class="hero">
         <div class="hero-photo">
-<div class="hero-photo">
-  <div class="photo-placeholder">
-    <img src="profile.jpg" alt="이진현 FC 프로필 사진" />
-  </div>
-</div>
+          <div class="photo-placeholder">
+            <img src="profile.jpg" alt="이진현 FC 프로필 사진" />
+          </div>
+        </div>
         <p class="eyebrow">우리금융 ABL생명 · 재무설계사(FC)</p>
         <h1>당신의 내일을 지키는<br /><span class="accent">1:1 맞춤 보험 상담</span></h1>
         <p class="lead">
@@ -175,7 +163,7 @@
         <p class="error" id="err-phone" role="alert"></p>
       </div>
       <div class="field">
-        <label for="email">이메일 <span class="opt">(선택)</span></label>
+        <label for="email">이메일</label>
         <input type="email" id="email" placeholder="example@naver.com" inputmode="email" />
         <p class="error" id="err-email" role="alert"></p>
       </div>
@@ -229,7 +217,7 @@
       <h2>개인정보 수집·이용 동의</h2>
       <p class="hint">상담 진행을 위해 아래 동의가 필요합니다.</p>
       <div class="consent-box">
-        <p><strong>수집 항목:</strong> 이름, 연락처, 이메일(선택), 성별, 흡연 여부, 운전 경력, 직업</p>
+        <p><strong>수집 항목:</strong> 이름, 연락처, 이메일, 성별, 흡연 여부, 운전 경력, 직업</p>
         <p><strong>수집 목적:</strong> 맞춤형 보험 상담 및 보장 분석, 상담 연락</p>
         <p><strong>보유 기간:</strong> 상담 완료 후 관련 법령에 따라 보관 후 파기</p>
         <p class="small-note">※ 건강 관련 정보(흡연 여부 등)는 민감정보로, 별도 동의 시에만 수집됩니다.</p>
@@ -246,7 +234,7 @@
       <p class="error" id="err-agree" role="alert"></p>
       <div class="actions">
         <button class="btn btn-ghost" data-goto="2">← 이전</button>
-        <button class="btn btn-primary" data-next="3" id="submitBtn">상담 신청 완료 →</button>
+        <button class="btn btn-primary" data-next="3">상담 신청 완료 →</button>
       </div>
     </section>
 
@@ -282,9 +270,6 @@
   </footer>
 
   <script>
-    // ★ Formspree 폼 ID — https://formspree.io 에서 발급받은 ID로 교체하세요 (위 HTML 주석 참고)
-    const FORMSPREE_ID = 'mljdawpq';
-
     const state = { name: '', phone: '', email: '', gender: null, smoking: null, driving: null, job: '' };
     const GENDER_LABELS = { male: '남성', female: '여성' };
     const SMOKING_LABELS = { non: '비흡연', smoker: '흡연' };
@@ -321,7 +306,8 @@
         if (digits.length < 10 || digits.length > 11) { setError('phone', '올바른 연락처를 입력해 주세요.'); ok = false; }
         else { setError('phone', ''); state.phone = phone; }
         const email = document.getElementById('email').value.trim();
-        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError('email', '올바른 이메일 주소를 입력해 주세요.'); ok = false; }
+        const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        if (!emailOk) { setError('email', '올바른 이메일 주소를 입력해 주세요.'); ok = false; }
         else { setError('email', ''); state.email = email; }
         return ok;
       }
@@ -358,71 +344,25 @@
     wireOptions('genderOptions', 'gender');
     wireOptions('smokingOptions', 'smoking');
     wireOptions('drivingOptions', 'driving');
-    async function submitLead() {
-      if (!FORMSPREE_ID || FORMSPREE_ID === 'YOUR_FORM_ID') {
-        throw new Error('Formspree ID가 설정되지 않았습니다.');
-      }
-      const payload = {
-        이름: state.name,
-        연락처: state.phone,
-        이메일: state.email || '-',
-        성별: GENDER_LABELS[state.gender],
-        흡연여부: SMOKING_LABELS[state.smoking],
-        운전경력: DRIVING_LABELS[state.driving],
-        직업: state.job,
-        마케팅동의: document.getElementById('agreeMarketing').checked ? '동의' : '미동의'
-      };
-      const res = await fetch('https://formspree.io/f/' + FORMSPREE_ID, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      if (!res.ok) throw new Error('전송 실패');
-    }
     function renderSummary() {
       document.getElementById('doneName').textContent = state.name;
       const box = document.getElementById('summaryBox');
-      box.innerHTML = '';
-      const rows = [
-        ['이름', state.name],
-        ['연락처', state.phone],
-        ['이메일', state.email || '-'],
-        ['성별', GENDER_LABELS[state.gender]],
-        ['흡연 여부', SMOKING_LABELS[state.smoking]],
-        ['운전 경력', DRIVING_LABELS[state.driving]],
-        ['직업', state.job]
-      ];
-      rows.forEach(function (row) {
-        const div = document.createElement('div');
-        const label = document.createElement('span');
-        label.textContent = row[0];
-        const value = document.createElement('span');
-        value.textContent = row[1];
-        div.appendChild(label);
-        div.appendChild(value);
-        box.appendChild(div);
-      });
+      box.innerHTML =
+        '<div><span>이름</span><span>' + state.name + '</span></div>' +
+        '<div><span>연락처</span><span>' + state.phone + '</span></div>' +
+        '<div><span>이메일</span><span>' + state.email + '</span></div>' +
+        '<div><span>성별</span><span>' + GENDER_LABELS[state.gender] + '</span></div>' +
+        '<div><span>흡연 여부</span><span>' + SMOKING_LABELS[state.smoking] + '</span></div>' +
+        '<div><span>운전 경력</span><span>' + DRIVING_LABELS[state.driving] + '</span></div>' +
+        '<div><span>직업</span><span>' + state.job + '</span></div>';
     }
     document.getElementById('startBtn').addEventListener('click', () => showStep('1'));
     document.querySelectorAll('[data-next]').forEach((btn) => {
-      btn.addEventListener('click', async () => {
+      btn.addEventListener('click', () => {
         const step = btn.dataset.next;
         if (!validateStep(step)) return;
-        if (step === '3') {
-          const originalText = btn.textContent;
-          btn.disabled = true;
-          btn.textContent = '전송 중...';
-          try {
-            await submitLead();
-            renderSummary();
-            showStep('done');
-          } catch (e) {
-            setError('agree', '전송에 실패했어요. 잠시 후 다시 시도해 주세요.');
-          } finally {
-            btn.disabled = false;
-            btn.textContent = originalText;
-          }
-        } else { showStep(String(Number(step) + 1)); }
+        if (step === '3') { renderSummary(); showStep('done'); }
+        else { showStep(String(Number(step) + 1)); }
       });
     });
     document.querySelectorAll('[data-goto]').forEach((btn) => {
