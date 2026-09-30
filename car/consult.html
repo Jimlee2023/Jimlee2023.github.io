@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>무료 점검 상담 신청 — 만기콕</title>
+  <meta name="theme-color" content="#1E4FD8">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/config.js"></script>
+  <script src="assets/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="logo" href="index.html"><span class="logo-mark">콕</span>만기콕</a>
+      <nav><a href="my.html">내 차</a><a href="consult.html" class="on">상담</a></nav>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <div class="wrap">
+        <div class="card fc" style="margin-bottom:20px">
+          <img class="fc-photo" src="assets/profile.jpg" alt="" width="96" height="120">
+          <div>
+            <p class="fc-name"><span data-config="fcName">이진현</span><small>FC</small></p>
+            <p class="fc-org"><span data-config="company">우리금융 ABL생명</span> <span data-config="branch">서울지점</span></p>
+            <p class="fc-quote">가입을 권하기 전에, 지금 가진 보장부터 함께 보겠습니다.</p>
+          </div>
+        </div>
+
+        <div class="card" id="formCard">
+          <h1 class="sec-title">무료 점검 상담 신청</h1>
+          <p class="sec-sub">남겨주시면 편한 방법으로 먼저 연락드릴게요.</p>
+
+          <form id="cForm" novalidate>
+            <div class="field">
+              <label for="name">이름</label>
+              <input type="text" id="name" placeholder="홍길동" maxlength="20" autocomplete="name">
+            </div>
+            <div class="field" id="f-phone">
+              <label for="phone">휴대폰 번호</label>
+              <input type="tel" id="phone" placeholder="010-0000-0000" inputmode="numeric" autocomplete="tel" maxlength="13">
+              <div class="err">휴대폰 번호를 확인해주세요.</div>
+            </div>
+
+            <div class="field" id="f-topic">
+              <span class="label">궁금한 내용 <span class="opt">여러 개 선택 가능</span></span>
+              <div class="chips">
+                <label class="chip"><input type="checkbox" name="topic" value="가족 보장 점검"><span>우리 가족 보장 점검</span></label>
+                <label class="chip"><input type="checkbox" name="topic" value="종신보험"><span>종신보험</span></label>
+                <label class="chip"><input type="checkbox" name="topic" value="건강·암보험"><span>건강·암보험</span></label>
+                <label class="chip"><input type="checkbox" name="topic" value="연금·노후"><span>연금·노후 준비</span></label>
+                <label class="chip" data-feature="autoInsurance"><input type="checkbox" name="topic" value="운전자보험"><span>운전자보험</span></label>
+                <label class="chip" data-feature="autoInsurance"><input type="checkbox" name="topic" value="자동차보험 만기"><span>자동차보험 만기</span></label>
+              </div>
+              <div class="err">하나 이상 선택해주세요.</div>
+            </div>
+
+            <div class="field" id="f-method">
+              <span class="label">연락 방법</span>
+              <div class="chips">
+                <label class="chip"><input type="radio" name="method" value="전화" checked><span>📞 전화</span></label>
+                <label class="chip"><input type="radio" name="method" value="문자"><span>✉️ 문자</span></label>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="time">연락받기 편한 시간</label>
+              <select id="time">
+                <option>언제든 괜찮아요</option>
+                <option>오전 (9~12시)</option>
+                <option>점심 (12~14시)</option>
+                <option>오후 (14~18시)</option>
+                <option>저녁 (18~21시)</option>
+                <option>주말</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="memo">남기실 말씀 <span class="opt">선택</span></label>
+              <textarea id="memo" maxlength="300" placeholder="예: 부모님 보험도 같이 봐주세요"></textarea>
+            </div>
+
+            <div class="consent" id="f-consent">
+              <label class="check"><input type="checkbox" id="agree"> <span>[필수] 상담 연락을 위한 개인정보 수집·이용 동의 (이름, 휴대폰 번호, 상담 내용) <a href="privacy.html" target="_blank">보기</a></span></label>
+              <div class="err">개인정보 수집·이용에 동의해주세요.</div>
+            </div>
+
+            <div class="hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
+
+            <button type="submit" class="btn btn-primary" id="cBtn">상담 신청하기</button>
+          </form>
+
+          <div class="btn-row" style="margin-top:12px">
+            <a class="btn btn-kakao" data-href="openChatUrl" target="_blank" rel="noopener">💬 카카오톡 오픈채팅으로 바로 물어보기</a>
+          </div>
+        </div>
+
+        <div class="card done" id="doneCard" hidden>
+          <div class="ico">🙌</div>
+          <h2>신청이 접수됐어요</h2>
+          <p><b data-config="fcName">이진현</b> FC가 말씀하신 시간에 먼저 연락드릴게요.</p>
+          <div class="btn-row">
+            <a class="btn btn-outline" href="my.html">내 차 만기 현황 보기</a>
+            <button class="btn btn-kakao" type="button" data-share>💬 가족·친구에게 만기콕 알려주기</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="wrap"></div></footer>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const $ = (id) => document.getElementById(id);
+    const f = $("cForm");
+    const p = MK.store.profile();
+    if (p.phone) $("phone").value = p.phone;
+    if (p.name) $("name").value = p.name;
+
+    // 주소에 ?topic=가족 보장 점검 처럼 넘기면 미리 선택
+    const pre = new URLSearchParams(location.search).get("topic");
+    if (pre) f.querySelectorAll('[name=topic]').forEach((c) => { if (c.value === pre) c.checked = true; });
+
+    $("phone").addEventListener("input", (e) => {
+      const d = MK.normPhone(e.target.value).slice(0, 11);
+      e.target.value = d.length > 7 ? MK.fmtPhone(d) : d.length > 3 ? `${d.slice(0, 3)}-${d.slice(3)}` : d;
+      $("f-phone").classList.remove("invalid");
+    });
+    f.addEventListener("change", (e) => {
+      if (e.target.name === "topic") $("f-topic").classList.remove("invalid");
+      if (e.target.id === "agree") $("f-consent").classList.remove("invalid");
+    });
+
+    f.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (f.website.value) return;
+      const topics = [...f.querySelectorAll("[name=topic]:checked")].map((c) => c.value);
+      const ok = [
+        MK.setInvalid($("f-phone"), !MK.isPhone($("phone").value)),
+        MK.setInvalid($("f-topic"), topics.length === 0),
+        MK.setInvalid($("f-consent"), !$("agree").checked),
+      ].every(Boolean);
+      if (!ok) { document.querySelector(".invalid").scrollIntoView({ behavior: "smooth", block: "center" }); return; }
+
+      const phone = MK.fmtPhone($("phone").value);
+      const name = $("name").value.trim();
+      $("cBtn").disabled = true; $("cBtn").textContent = "신청 중…";
+      try {
+        await MK.send("consult", {
+          name, phone, topics: topics.join(", "),
+          method: f.querySelector("[name=method]:checked").value,
+          time: $("time").value, memo: $("memo").value.trim(),
+          plates: MK.store.cars().map((c) => c.plate).join(", "),
+          consentRequired: "Y", refCode: MK.myRefCode(),
+        });
+        MK.store.saveProfile({ phone, name });
+        $("formCard").hidden = true; $("doneCard").hidden = false;
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } catch (err) {
+        MK.toast("신청하지 못했어요. 인터넷 연결을 확인하고 다시 시도해주세요.");
+        $("cBtn").disabled = false; $("cBtn").textContent = "상담 신청하기";
+      }
+    });
+  });
+  </script>
+</body>
+</html>
