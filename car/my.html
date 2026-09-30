@@ -26,29 +26,29 @@
         <div id="welcome" class="card done" hidden style="margin-bottom:20px">
           <div class="ico">✅</div>
           <h2>등록이 끝났어요!</h2>
-          <p class="sec-sub" style="margin:0">아래 <b>[달력에 알림 저장]</b>을 눌러두시면<br>휴대폰이 30일 전, 7일 전, 하루 전에 알려드려요.</p>
+          <p class="sec-sub">아래 <b>[달력에 알림 저장]</b>을 눌러두시면<br>휴대폰이 30일 전, 7일 전, 하루 전에 알려드려요.</p>
+          <div class="welcome-cta">
+            <p><b>🎁 등록 고객 무료 혜택</b><br>우리 가족 보장, 5분 만에 점검해드려요.</p>
+            <a class="btn btn-accent" href="consult.html?topic=가족 보장 점검">무료 점검 상담 신청하기 →</a>
+          </div>
         </div>
 
         <h1 class="sec-title">내 차 만기 현황</h1>
         <p class="sec-sub">오늘 기준 남은 날짜예요.</p>
         <div id="cars"></div>
 
-        <div class="btn-row" style="margin-top:6px">
-          <a class="btn btn-outline" href="index.html#register">+ 가족 차량 추가하기</a>
-          <button class="btn btn-kakao" type="button" data-share>💬 가족·친구에게 알려주기</button>
-        </div>
-      </div>
-    </section>
-
-    <section style="padding-top:0">
-      <div class="wrap">
-        <div class="cta-box">
+        <div class="cta-box" id="ctaBox" style="margin-bottom:16px">
           <h3>만기 전, 5분 점검 받아보세요</h3>
           <p>지금 보장이 우리 가족에게 맞는지 무료로 함께 확인해드려요. 부담 없이 물어보세요.</p>
           <div class="btn-row">
             <a class="btn btn-accent" href="consult.html">무료 점검 상담 신청</a>
             <a class="btn btn-kakao" data-href="openChatUrl" target="_blank" rel="noopener">카카오톡으로 물어보기</a>
           </div>
+        </div>
+
+        <div class="btn-row">
+          <a class="btn btn-outline" href="index.html#register">+ 가족 차량 추가하기</a>
+          <button class="btn btn-kakao" type="button" data-share>💬 가족·친구에게 알려주기</button>
         </div>
       </div>
     </section>
@@ -69,9 +69,13 @@
 
   <footer><div class="wrap"></div></footer>
 
+  <div class="sticky-cta" id="sticky"><a class="btn btn-accent" href="consult.html">💬 무료 점검 상담 신청</a></div>
+
   <script>
   document.addEventListener("DOMContentLoaded", () => {
     const box = document.getElementById("cars");
+    // 상담 박스가 화면에 보이면 하단 고정 버튼 숨김
+    new IntersectionObserver(([en]) => { document.getElementById("sticky").style.display = en.isIntersecting ? "none" : ""; }).observe(document.getElementById("ctaBox"));
     const params = new URLSearchParams(location.search);
     if (params.get("new")) document.getElementById("welcome").hidden = false;
 
