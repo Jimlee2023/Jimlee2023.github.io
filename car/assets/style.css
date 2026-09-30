@@ -142,6 +142,9 @@ details.more[open] summary { margin-bottom: 14px; }
 .empty { text-align: center; padding: 30px 10px; color: var(--muted); }
 .empty .ico { font-size: 44px; }
 
+.welcome-cta { margin-top: 18px; padding: 18px; border-radius: 14px; background: linear-gradient(150deg, var(--primary-dark), var(--primary)); color: #fff; text-align: left; }
+.welcome-cta p { margin: 0 0 14px; font-size: 16px; }
+
 .done { text-align: center; }
 .done .ico { font-size: 54px; }
 .done h2 { margin: 8px 0; color: var(--primary-dark); }
