@@ -1467,6 +1467,15 @@
         });
       });
 
+    // 010 1234 5678, 010.1234.5678 처럼 입력해도 010-1234-5678 로 맞춰서 보냅니다.
+    function formatPhone(value) {
+      const d = value.replace(/[^0-9]/g, "");
+      if (d.length === 11) return d.slice(0, 3) + "-" + d.slice(3, 7) + "-" + d.slice(7);
+      if (d.length === 10 && d.startsWith("02")) return d.slice(0, 2) + "-" + d.slice(2, 6) + "-" + d.slice(6);
+      if (d.length === 10) return d.slice(0, 3) + "-" + d.slice(3, 6) + "-" + d.slice(6);
+      return value;
+    }
+
     async function submitConsult(button) {
       const label = button.textContent;
       button.disabled = true;
@@ -1476,7 +1485,7 @@
       const payload = {
         type: "home",
         name: state.name,
-        phone: state.phone,
+        phone: formatPhone(state.phone),
         email: state.email,
         gender: GENDER_LABELS[state.gender],
         smoking: SMOKING_LABELS[state.smoking],
