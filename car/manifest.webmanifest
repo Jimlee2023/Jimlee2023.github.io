@@ -1,0 +1,16 @@
+{
+  "name": "만기콕 — 자동차 만기 알림",
+  "short_name": "만기콕",
+  "description": "자동차보험·검사·엔진오일 만기를 무료로 챙겨드려요.",
+  "start_url": "my.html?utm_source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F4F7FC",
+  "theme_color": "#1E4FD8",
+  "lang": "ko",
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

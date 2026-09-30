@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>내 차 — 만기콕</title>
+  <meta name="theme-color" content="#1E4FD8">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/config.js"></script>
+  <script src="assets/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="logo" href="index.html"><span class="logo-mark">콕</span>만기콕</a>
+      <nav><a href="my.html" class="on">내 차</a><a href="consult.html">상담</a></nav>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <div class="wrap">
+        <div id="welcome" class="card done" hidden style="margin-bottom:20px">
+          <div class="ico">✅</div>
+          <h2>등록이 끝났어요!</h2>
+          <p class="sec-sub" style="margin:0">아래 <b>[달력에 알림 저장]</b>을 눌러두시면<br>휴대폰이 30일 전, 7일 전, 하루 전에 알려드려요.</p>
+        </div>
+
+        <h1 class="sec-title">내 차 만기 현황</h1>
+        <p class="sec-sub">오늘 기준 남은 날짜예요.</p>
+        <div id="cars"></div>
+
+        <div class="btn-row" style="margin-top:6px">
+          <a class="btn btn-outline" href="index.html#register">+ 가족 차량 추가하기</a>
+          <button class="btn btn-kakao" type="button" data-share>💬 가족·친구에게 알려주기</button>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding-top:0">
+      <div class="wrap">
+        <div class="cta-box">
+          <h3>만기 전, 5분 점검 받아보세요</h3>
+          <p>지금 보장이 우리 가족에게 맞는지 무료로 함께 확인해드려요. 부담 없이 물어보세요.</p>
+          <div class="btn-row">
+            <a class="btn btn-accent" href="consult.html">무료 점검 상담 신청</a>
+            <a class="btn btn-kakao" data-href="openChatUrl" target="_blank" rel="noopener">카카오톡으로 물어보기</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding-top:0">
+      <div class="wrap">
+        <div class="card fc">
+          <img class="fc-photo" src="assets/profile.jpg" alt="" width="96" height="120" loading="lazy">
+          <div>
+            <p class="fc-name"><span data-config="fcName">이진현</span><small>FC</small></p>
+            <p class="fc-org"><span data-config="company">우리금융 ABL생명</span> <span data-config="branch">서울지점</span></p>
+            <p class="fc-quote">잊으셔도 괜찮아요. 제가 먼저 챙기겠습니다.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="wrap"></div></footer>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const box = document.getElementById("cars");
+    const params = new URLSearchParams(location.search);
+    if (params.get("new")) document.getElementById("welcome").hidden = false;
+
+    function esc(s) { return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+    function ddayText(n) { return n === 0 ? "D-DAY" : n > 0 ? `D-${n}` : `${-n}일 지남`; }
+
+    function render() {
+      const cars = MK.store.cars();
+      if (!cars.length) {
+        box.innerHTML = `<div class="card empty"><div class="ico">🚗</div><p>아직 등록된 차량이 없어요.</p><a class="btn btn-primary" href="index.html#register">내 차 등록하기</a></div>`;
+        return;
+      }
+      box.innerHTML = cars.map((car) => {
+        const rows = MK.schedule(car).map((it) => {
+          const n = MK.daysUntil(it.date);
+          const cls = n < 0 ? "over" : n <= 30 ? "soon" : "";
+          return `
+            <div>
+              <div class="dday ${cls}">
+                <div class="what"><b>${it.title}</b><span>${MK.fmt(it.date)} · ${it.note}</span></div>
+                <div class="num">${ddayText(n)}</div>
+              </div>
+              <div class="cal-btns">
+                <button class="btn btn-outline" type="button" data-ics="${car.id}|${it.key}">📅 달력에 알림 저장</button>
+                <a class="btn btn-outline" target="_blank" rel="noopener" href="${MK.googleCalUrl(car, it)}">구글 캘린더</a>
+              </div>
+            </div>`;
+        }).join("");
+        return `
+          <div class="card car">
+            <div class="car-head"><span class="plate">${esc(car.plate)}</span><button class="icon-btn" type="button" data-del="${car.id}">삭제</button></div>
+            <div class="dday-list">${rows}</div>
+          </div>`;
+      }).join("");
+    }
+
+    box.addEventListener("click", (e) => {
+      const ics = e.target.closest("[data-ics]");
+      if (ics) {
+        const [id, key] = ics.dataset.ics.split("|");
+        const car = MK.store.cars().find((c) => c.id === id);
+        const item = car && MK.schedule(car).find((x) => x.key === key);
+        if (item) { MK.downloadIcs(car, item); MK.toast("열리는 화면에서 [추가]를 눌러주세요."); }
+      }
+      const del = e.target.closest("[data-del]");
+      if (del && confirm("이 차량을 목록에서 삭제할까요?")) {
+        MK.store.saveCars(MK.store.cars().filter((c) => c.id !== del.dataset.del));
+        render();
+      }
+    });
+
+    render();
+  });
+  </script>
+</body>
+</html>
