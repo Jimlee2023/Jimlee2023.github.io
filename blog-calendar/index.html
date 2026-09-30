@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>우주색연필 · hjw1997 블로그 점검 캘린더 v2</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<style>
+:root{
+  --navy:#0B2A5B; --blue:#1D4ED8; --blue2:#2563EB; --sky:#DBEAFE; --sky2:#EFF6FF;
+  --bg:#F3F7FD; --card:#FFFFFF; --line:#DCE6F5; --text:#0F1E36; --muted:#5B6B85;
+  --red:#DC2626; --redbg:#FEF2F2; --amber:#B45309; --amberbg:#FFFBEB; --green:#15803D; --greenbg:#F0FDF4;
+}
+*{box-sizing:border-box}
+html{font-size:18px}
+body{margin:0;font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Malgun Gothic",sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--blue)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+.muted{color:var(--muted)}
+.hidden{display:none!important}
+
+/* 상단 */
+header.top{background:linear-gradient(135deg,var(--navy),#12408A);color:#fff;padding:18px 0 20px}
+header.top .wrap{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+header.top h1{margin:0;font-size:1.5rem;font-weight:800;letter-spacing:-.02em}
+header.top p{margin:2px 0 0;color:#C7D8F5;font-size:.85rem}
+.today-date{display:inline-block;margin-top:6px;background:rgba(255,255,255,.14);padding:3px 12px;border-radius:999px;font-weight:700;font-size:.85rem}
+.head-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.seg{display:flex;background:rgba(255,255,255,.12);border-radius:12px;padding:3px}
+.seg button{border:0;background:transparent;color:#fff;padding:6px 12px;border-radius:9px;font-weight:700}
+.seg button.on{background:#fff;color:var(--navy)}
+
+/* 버튼 */
+.btn{border:1px solid var(--line);background:#fff;color:var(--text);padding:9px 14px;border-radius:12px;font-weight:700;font-size:.9rem;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.btn:hover{border-color:var(--blue2)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.primary:hover{background:var(--blue2)}
+.btn.white{background:#fff;color:var(--navy);border-color:#fff}
+.btn.danger{color:var(--red);border-color:#FCA5A5}
+.btn.sm{padding:6px 10px;font-size:.8rem;border-radius:10px}
+.btn.big{padding:13px 20px;font-size:1rem}
+
+/* 카드 */
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 2px 10px rgba(11,42,91,.05)}
+.sec{margin-top:18px}
+.sec-title{display:flex;align-items:center;gap:8px;margin:0 0 12px;font-size:1.15rem;font-weight:800;color:var(--navy)}
+.num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;font-size:.85rem}
+
+/* 오늘 */
+.today-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:18px}
+@media(max-width:860px){.today-grid{grid-template-columns:1fr}}
+.today-post{border:2px solid var(--sky);background:var(--sky2);border-radius:16px;padding:16px;margin-bottom:10px}
+.today-post h3{margin:6px 0 8px;font-size:1.3rem;line-height:1.35}
+.today-post .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.check-list{list-style:none;margin:0;padding:0}
+.check-list li{margin-bottom:8px}
+.check-list label{display:flex;gap:12px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:14px;cursor:pointer;background:#fff;font-weight:600}
+.check-list input{width:24px;height:24px;accent-color:var(--blue);flex-shrink:0}
+.check-list li.done label{background:var(--sky2);color:var(--muted);text-decoration:line-through}
+.progress{height:12px;background:var(--sky);border-radius:999px;overflow:hidden;margin:6px 0 14px}
+.progress>div{height:100%;background:var(--blue);transition:width .3s}
+
+/* 배지 */
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.75rem;font-weight:800;white-space:nowrap}
+.st-published{background:var(--blue);color:#fff}
+.st-draft_ready{background:#BFDBFE;color:#1E3A8A}
+.st-scheduled{background:#fff;color:var(--muted);border:1px solid var(--line)}
+.st-overdue{background:var(--red);color:#fff}
+.shop{background:var(--amberbg);color:var(--amber);border:1px solid #FCD34D}
+.c1{background:#E0E7FF;color:#3730A3}.c2{background:#DCFCE7;color:#166534}.c3{background:#FEF3C7;color:#92400E}
+.c4{background:#FCE7F3;color:#9D174D}.c5{background:#F3E8FF;color:#6B21A8}.c0{background:#E5E7EB;color:#374151}
+
+/* 성과 요약 */
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+@media(max-width:860px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 14px}
+.kpi .l{font-size:.78rem;color:var(--muted);font-weight:700}
+.kpi .v{font-size:1.45rem;font-weight:800;color:var(--navy)}
+.kpi .s{font-size:.72rem;color:var(--muted)}
+
+/* 자동 점검 */
+.alert{border-radius:14px;padding:14px 16px;margin-bottom:10px;border:1px solid}
+.alert.red{background:var(--redbg);border-color:#FCA5A5}
+.alert.orange{background:var(--amberbg);border-color:#FCD34D}
+.alert.blue{background:var(--sky2);border-color:#BFDBFE}
+.alert.ok{background:var(--greenbg);border-color:#86EFAC}
+.alert .t{font-weight:800}
+.alert.red .t{color:var(--red)} .alert.orange .t{color:var(--amber)} .alert.blue .t{color:var(--blue)} .alert.ok .t{color:var(--green)}
+.alert .d{font-size:.88rem;color:var(--muted);margin-top:2px}
+.alert ul{margin:8px 0 0;padding:0;list-style:none}
+.alert li{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:6px 0;border-top:1px dashed rgba(0,0,0,.08);font-size:.9rem}
+.alert li .grow{flex:1;min-width:180px}
+.more{margin-top:6px;font-size:.85rem;background:none;border:0;color:var(--blue);font-weight:700;padding:0}
+
+/* 달력 */
+.month-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.month-bar h2{margin:0;font-size:1.4rem;color:var(--navy)}
+.month-sum{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.month-sum span{background:var(--sky2);border:1px solid var(--line);padding:4px 10px;border-radius:999px;font-size:.8rem;font-weight:700}
+.month-sum span.warn{background:var(--redbg);border-color:#FCA5A5;color:var(--red)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal .wd{text-align:center;font-weight:800;font-size:.8rem;color:var(--muted);padding:4px 0}
+.cal .wd.sun{color:var(--red)} .cal .wd.sat{color:var(--blue)}
+.day{min-height:104px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:6px;display:flex;flex-direction:column;gap:4px;cursor:pointer}
+.day:hover{border-color:var(--blue2)}
+.day.empty{background:transparent;border:0;cursor:default}
+.day.today{outline:3px solid var(--blue);outline-offset:-1px}
+.day.past{background:#FAFBFE}
+.day .n{font-weight:800;font-size:.85rem}
+.day .n.sun{color:var(--red)} .day .n.sat{color:var(--blue)}
+.chip{display:block;border:0;text-align:left;font-size:.72rem;font-weight:700;padding:3px 6px;border-radius:7px;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%}
+.chip.published{background:var(--blue);color:#fff}
+.chip.draft_ready{background:#BFDBFE;color:#1E3A8A}
+.chip.scheduled{background:#F1F5F9;color:#334155;border:1px solid var(--line)}
+.chip.overdue{background:var(--red);color:#fff}
+.chip.shopflag{box-shadow:inset 0 -3px 0 #F59E0B}
+.day .plus{font-size:.7rem;color:var(--muted);font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;font-size:.8rem;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+@media(max-width:700px){.day{min-height:64px}.chip{font-size:0;padding:0;height:8px}.chip::after{content:''}}
+
+/* 목록 */
+.filters{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:16px 0 10px}
+.filters button{border:1px solid var(--line);background:#fff;padding:6px 12px;border-radius:999px;font-weight:700;font-size:.85rem}
+.filters button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.filters input{flex:1;min-width:180px;padding:8px 12px;border:1px solid var(--line);border-radius:12px}
+.rows{display:flex;flex-direction:column;gap:8px}
+.prow{display:grid;grid-template-columns:92px 1fr 120px 210px auto;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.prow.is-overdue{border-color:#FCA5A5;background:#FFFAFA}
+.prow .dt{font-weight:800;font-size:.85rem}
+.prow .tt{font-weight:700;cursor:pointer}
+.prow .tt:hover{color:var(--blue);text-decoration:underline}
+.prow .meta{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}
+.prow select{padding:6px 8px;border:1px solid var(--line);border-radius:10px;font-weight:700;font-size:.85rem;width:100%}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.stats label{font-size:.66rem;color:var(--muted);font-weight:700;text-align:center}
+.stats input{width:100%;padding:5px 4px;border:1px solid var(--line);border-radius:8px;text-align:center;font-weight:700;font-size:.85rem}
+.stats input.empty{background:#FFF7ED;border-color:#FDBA74}
+.acts{display:flex;gap:4px}
+@media(max-width:860px){.prow{grid-template-columns:1fr 1fr}.prow .dt{grid-column:1/-1}.prow>div:nth-child(2){grid-column:1/-1}}
+
+/* 규칙 */
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:760px){.rules{grid-template-columns:1fr}}
+.rule{border:1px solid var(--line);background:var(--sky2);border-radius:14px;padding:14px}
+.rule b{color:var(--navy)}
+.rule p{margin:6px 0 0;font-size:.9rem;color:var(--muted)}
+
+/* 연동 */
+.tools{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:860px){.tools{grid-template-columns:1fr}}
+.tool{border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.tool h4{margin:0;color:var(--navy)}
+.tool p{margin:0;font-size:.85rem;color:var(--muted)}
+.tool .btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+
+/* 창 */
+dialog{border:0;border-radius:20px;padding:0;width:min(560px,94vw);box-shadow:0 20px 60px rgba(11,42,91,.3)}
+dialog::backdrop{background:rgba(11,42,91,.45)}
+.dlg{padding:22px}
+.dlg h3{margin:0 0 14px;color:var(--navy)}
+.fg{margin-bottom:10px}
+.fg label{display:block;font-size:.8rem;font-weight:800;color:var(--muted);margin-bottom:3px}
+.fg input,.fg select,.fg textarea{width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:12px}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:2px solid var(--blue2);border-color:transparent}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.dlg-foot{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;margin-top:14px}
+.dlg-foot div{display:flex;gap:8px;flex-wrap:wrap}
+.warnbox{background:var(--redbg);color:var(--red);border:1px solid #FCA5A5;padding:10px 12px;border-radius:12px;font-size:.85rem;font-weight:700;margin-bottom:12px}
+
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);background:var(--navy);color:#fff;padding:12px 20px;border-radius:14px;font-weight:700;transition:transform .3s;z-index:99;max-width:92vw;text-align:center}
+#toast.show{transform:translateX(-50%) translateY(0)}
+footer{padding:24px 0 40px;color:var(--muted);font-size:.8rem;text-align:center}
+
+@media print{
+  header.top .head-tools,#sec-tools,.filters,.acts,.btn,#sec-today .check-list{display:none!important}
+  body{background:#fff}.card{box-shadow:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div>
+      <h1>우주색연필 · 블로그 점검 캘린더</h1>
+      <p>복막투석 10년차 당사자 콘텐츠 플래너 · blog.naver.com/hjw1997</p>
+      <span class="today-date" id="todayLabel"></span>
+    </div>
+    <div class="head-tools">
+      <div class="seg" title="글자 크기">
+        <button data-scale="16">가</button>
+        <button data-scale="18">가+</button>
+        <button data-scale="21">가++</button>
+      </div>
+      <a class="btn white" href="https://blog.naver.com/hjw1997" target="_blank" rel="noopener">내 블로그 열기 ↗</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="storageWarn" class="warnbox hidden" style="margin-top:16px">
+    ⚠ 이 브라우저에서는 저장이 되지 않아요. 창을 닫기 전에 맨 아래 [백업 파일 저장] 버튼을 꼭 눌러주세요.
+  </div>
+
+  <!-- 1. 오늘 -->
+  <section class="sec" id="sec-today">
+    <h2 class="sec-title"><span class="num">1</span> 오늘 할 일</h2>
+    <div class="today-grid">
+      <div class="card" id="todayPosts"></div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <b style="color:var(--navy)">오늘의 점검 체크리스트</b>
+          <span class="muted" id="checkCount"></span>
+        </div>
+        <div class="progress"><div id="checkBar" style="width:0"></div></div>
+        <ul class="check-list" id="checkList"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 자동 점검 -->
+  <section class="sec">
+    <h2 class="sec-title"><span class="num">2</span> 자동 점검 결과 <span class="muted" style="font-size:.8rem;font-weight:600">· 빨간색부터 해결하세요</span></h2>
+    <div class="card" id="alerts"></div>
+  </section>
+
+  <!-- 3. 성과 -->
+  <section class="sec">
+    <h2 class="sec-title"><span class="num">3</span> 전체 성과</h2>
+    <div class="kpis" id="kpis"></div>
+  </section>
+
+  <!-- 4. 달력 -->
+  <section class="sec">
+    <h2 class="sec-title"><span class="num">4</span> 발행 달력</h2>
+    <div class="card">
+      <div class="month-bar">
+        <button class="btn" id="prevMonth">◀ 이전 달</button>
+        <h2 id="monthTitle"></h2>
+        <button class="btn" id="nextMonth">다음 달 ▶</button>
+      </div>
+      <div class="month-sum" id="monthSum"></div>
+      <div class="cal" id="cal"></div>
+      <div class="legend">
+        <span><i style="background:var(--blue)"></i>발행 완료</span>
+        <span><i style="background:#BFDBFE"></i>원고 완성</span>
+        <span><i style="background:#F1F5F9;border:1px solid var(--line)"></i>작성 예정</span>
+        <span><i style="background:var(--red)"></i>밀림(날짜 지남)</span>
+        <span>🛒 쇼핑링크 포함</span>
+        <span>· 빈 곳을 누르면 새 글을 추가해요</span>
+      </div>
+
+      <div class="filters" id="filters">
+        <span class="muted" style="font-size:.8rem;font-weight:700">이 달 목록:</span>
+        <button data-f="all" class="on">전체</button>
+        <button data-f="overdue">밀린 글</button>
+        <button data-f="todo">아직 안 쓴 글</button>
+        <button data-f="nostats">조회수 미입력</button>
+        <button data-f="shop">쇼핑링크</button>
+        <input type="search" id="search" placeholder="제목·키워드 검색 (모든 달)">
+      </div>
+      <div class="rows" id="rows"></div>
+    </div>
+  </section>
+
+  <!-- 5. 규칙 -->
+  <section class="sec">
+    <h2 class="sec-title"><span class="num">5</span> C-Rank 회복 운영 규칙 <span class="muted" style="font-size:.8rem;font-weight:600">· 자동 점검이 이 규칙으로 확인해요</span></h2>
+    <div class="card rules">
+      <div class="rule"><b>① 쇼핑링크 엄격 제한</b><p>9월 16일 ~ 10월 14일은 쇼핑링크 0편. 10월 15일부터는 한 달 최대 4편, 서로 5일 이상 띄워서 넣어요.</p></div>
+      <div class="rule"><b>② 하루 1편만 발행</b><p>하루에 2~3편씩 올리면 기계적인 발행으로 보일 수 있어요. 여러 편이 준비되면 다음 날로 미뤄요.</p></div>
+      <div class="rule"><b>③ 같은 제목·키워드 반복 금지</b><p>이미 쓴 제목이나 키워드로 또 쓰면 중복 글로 보일 수 있어요. 겹치면 제목과 관점을 바꿔요.</p></div>
+      <div class="rule"><b>④ 성과는 조회수로 확인</b><p>공감·댓글보다 실제로 읽힌 조회수가 중요해요. 글끼리 비교할 수 있게 발행 7일 뒤에 조회수를 기록해요.</p></div>
+    </div>
+  </section>
+
+  <!-- 6. 연동 -->
+  <section class="sec" id="sec-tools">
+    <h2 class="sec-title"><span class="num">6</span> 연동 · 백업</h2>
+    <div class="card tools">
+      <div class="tool">
+        <h4>📅 휴대폰·캘린더 알림 연동</h4>
+        <p>아직 발행 안 한 글 일정을 파일로 받아 구글·네이버 캘린더나 휴대폰 달력에 넣을 수 있어요.</p>
+        <p>· 아이폰: 그날 아침 9시에 알림이 와요.<br>· 구글·네이버 캘린더: 캘린더에 설정된 기본 알림으로 울려요.<br>· 날짜를 바꾼 뒤 다시 넣으면 예전 일정이 남을 수 있어요. 캘린더에서 지워주세요.</p>
+        <div class="btns"><button class="btn primary" id="btnIcs">일정 파일 받기 (.ics)</button></div>
+      </div>
+      <div class="tool">
+        <h4>💾 백업 · 다른 기기로 옮기기</h4>
+        <p>체크한 내용과 입력한 숫자는 이 컴퓨터의 이 브라우저에만 저장돼요. 백업 파일을 저장해두면 다른 컴퓨터나 휴대폰에서 [백업 불러오기]로 이어서 쓸 수 있어요.</p>
+        <p id="backupInfo" style="font-weight:700"></p>
+        <div class="btns">
+          <button class="btn primary" id="btnBackup">백업 파일 저장</button>
+          <button class="btn" id="btnRestore">백업 불러오기</button>
+          <input type="file" id="restoreFile" accept=".json,application/json" class="hidden">
+        </div>
+      </div>
+      <div class="tool">
+        <h4>📊 보고서</h4>
+        <p>모든 글의 날짜, 상태, 조회수, 공감, 댓글을 엑셀 파일로 받거나 인쇄할 수 있어요.</p>
+        <div class="btns">
+          <button class="btn" id="btnCsv">엑셀(CSV) 받기</button>
+          <button class="btn" onclick="window.print()">인쇄</button>
+        </div>
+      </div>
+    </div>
+    <p style="text-align:right;margin-top:18px"><button class="btn sm danger" id="btnReset">모든 입력 지우고 처음 상태로</button></p>
+  </section>
+
+  <footer>입력한 내용은 이 브라우저에 자동 저장돼요 · 조회수는 네이버에서 직접 확인한 뒤 입력해주세요</footer>
+</main>
+
+<!-- 글 수정 창 -->
+<dialog id="dlg">
+  <form class="dlg" method="dialog" id="dlgForm">
+    <h3 id="dlgTitle">글 정보</h3>
+    <div id="dlgWarn" class="warnbox hidden"></div>
+    <div class="g2">
+      <div class="fg"><label>발행 날짜</label><input type="date" id="f-iso" required></div>
+      <div class="fg"><label>진행 상태</label>
+        <select id="f-status">
+          <option value="scheduled">작성 예정</option>
+          <option value="draft_ready">원고 완성</option>
+          <option value="published">발행 완료</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg"><label>제목</label><input type="text" id="f-title" required></div>
+    <div class="g2">
+      <div class="fg"><label>핵심 키워드</label><input type="text" id="f-keyword"></div>
+      <div class="fg"><label>분야</label>
+        <select id="f-cat">
+          <option value="당사자">당사자</option><option value="제도">제도·혜택</option>
+          <option value="식단">식단</option><option value="시즌">시즌</option><option value="영양제">성분·영양제</option>
+        </select>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="fg"><label>글 유형</label><input type="text" id="f-neo" placeholder="예) 상황묘사형"></div>
+      <div class="fg"><label>쇼핑링크</label>
+        <select id="f-shopping"><option value="0">없음</option><option value="1">포함 🛒</option></select>
+      </div>
+    </div>
+    <div class="fg"><label>발행 주소 (블로그 글 주소를 붙여넣어요)</label><input type="text" id="f-url" inputmode="url" autocomplete="off" placeholder="blog.naver.com/hjw1997/..."></div>
+    <div class="g3">
+      <div class="fg"><label>조회수</label><input type="text" inputmode="numeric" id="f-views"></div>
+      <div class="fg"><label>공감</label><input type="text" inputmode="numeric" id="f-likes"></div>
+      <div class="fg"><label>댓글</label><input type="text" inputmode="numeric" id="f-comments"></div>
+    </div>
+    <div class="fg"><label>메모</label><textarea id="f-memo" rows="2"></textarea></div>
+    <div class="dlg-foot">
+      <div>
+        <button type="button" class="btn sm" id="dlgCopy">제목 복사</button>
+        <button type="button" class="btn sm" id="dlgGcal">구글 캘린더에 추가</button>
+        <button type="button" class="btn sm danger" id="dlgDelete">삭제</button>
+      </div>
+      <div>
+        <button type="button" class="btn" id="dlgCancel">취소</button>
+        <button type="submit" class="btn primary" id="dlgSave">저장</button>
+      </div>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast"></div>
+
+<script>
+/* ============ 기본 데이터 (기존 캘린더에서 그대로 옮김) ============
+   형식: [id, 날짜(월-일), 제목, 키워드, 분야, 상태, 공감, 댓글, 조회, 쇼핑링크(1/0), 글번호, 글유형, 메모] */
+const YEAR = 2026;
+const RAW = [
+["aug-31-1","08-31","병아리콩효능, 당뇨엔 좋은데 콩팥은요","병아리콩효능","식단","published",200,120,null,1,"224396044414","질문형",""],
+["aug-31-2","08-31","故 이용주 사망으로 본 심근비대증 원인과 증상","심근비대증","당사자","published",163,64,null,0,"224395790896","상황묘사형",""],
+["aug-31-3","08-31","판다랭크 활용법, 블로그 성장으로 수익화까지 쉽게 이루기 위한 실전 과정","판다랭크","시즌","published",72,68,null,0,"224395756932","정리형",""],
+["aug-30","08-30","복막투석 재택관리 시범사업, 저도 이번에 알았어요","복막투석 재택관리","제도","published",178,80,null,0,"224394773755","상황묘사형",""],
+["aug-29","08-29","복막투석 집 준비, 투석액 둘 공간부터 정했어요","복막투석 집 준비","당사자","published",146,59,null,0,"224394277263","실패담형",""],
+["aug-26-1","08-26","만성질환자 독감 예방접종, 무료 대상일까요","독감 예방접종","시즌","published",216,155,null,0,"224390608926","질문형",""],
+["aug-26-2","08-26","크레아티닌 정상수치, 결과지에서 이것부터 봤어요","크레아티닌 정상수치","당사자","published",195,105,null,0,"224390498215","수치형",""],
+["aug-25-1","08-25","산정특례 신청 방법, 투석 시작하면 이것부터","산정특례 신청","제도","published",169,70,null,0,"224389484638","정리형",""],
+["aug-25-2","08-25","국가건강검진 대상자 조회, 3분이면 끝나요","국가건강검진","제도","published",182,81,null,0,"224389369447","수치형",""],
+["aug-24-1","08-24","칼슘과 마그네슘, 같이 먹으면 안 되는 이유","칼슘 마그네슘","식단","published",202,87,null,1,"224388242902","질문형",""],
+["aug-24-2","08-24","복막투석 10년차, 칼륨 때문에 여름 과일 포기한 이야기","복막투석 칼륨 과일","당사자","published",207,119,null,0,"224388185221","실패담형",""],
+["aug-21-1","08-21","루피니빈 혈당 효과, 당뇨 20년차가 직접 먹어봤습니다","루피니빈 혈당","식단","published",201,141,null,1,"224385676466","후기형",""],
+["aug-21-2","08-21","복막투석 환자가 먹어도 되는 영양제, 10년차가 정리했습니다","복막투석 영양제","식단","published",170,64,null,1,"224385627275","정리형",""],
+["aug-21-3","08-21","당뇨 20년 겪으며 알게 된 것들","당뇨 20년","당사자","published",168,100,null,0,"224385269385","상황묘사형",""],
+["aug-20-1","08-20","마그네슘 글리시네이트, 수면 개선 61% 진짜일까","마그네슘 글리시네이트","식단","published",183,67,null,1,"224384169378","수치형",""],
+["aug-20-2","08-20","복막투석 10년차, 인 수치 11.2를 받아들이기까지","인 수치","당사자","published",152,63,null,0,"224384133831","수치형",""],
+["aug-20-3","08-20","유산균 100억 vs 300억 차이, 어떤 걸 골라야 할까","유산균 100억","식단","published",159,74,null,1,"224384125254","질문형",""],
+["aug-19-1","08-19","피로 개선 효과 1위, 비타민B군 제대로 고르는 법","비타민B군","식단","published",138,46,null,1,"224383101024","정리형",""],
+["aug-19-2","08-19","나의 회고 #4 그래도, 오늘을 삽니다","회고","당사자","published",141,58,null,0,"224382959383","상황묘사형",""],
+["aug-18-1","08-18","복막투석 환자의 외식, 이렇게 먹습니다","복막투석 외식","식단","published",160,90,null,0,"224381836363","실패담형",""],
+["aug-18-2","08-18","복막투석 10년차, 혈압 관리가 이렇게 어렵습니다","복막투석 혈압","당사자","published",143,50,null,0,"224381824166","상황묘사형",""],
+["aug-17-1","08-17","나의 회고 #3 또 수술대 위에서","회고","당사자","published",139,62,null,0,"224380954190","상황묘사형",""],
+["aug-17-2","08-17","복막투석 환자의 식단, 칼륨과 인을 이렇게 관리합니다","복막투석 식단","식단","published",145,57,null,0,"224380941883","정리형",""],
+["aug-17-3","08-17","복막투석 교환 시간표, 하루 4번 이렇게 합니다","복막투석 교환","당사자","published",129,51,null,0,"224380924106","수치형",""],
+["aug-14","08-14","비타민C 500mg vs 1000mg 차이, 내게 맞는 용량은","비타민C","식단","published",178,111,null,1,"224378210415","질문형",""],
+
+["sep-1","09-01","복막투석 추석 준비, 10년 차 체크리스트","복막투석 추석","시즌","published",167,92,56,0,"224397688127","체크리스트형",""],
+["sep-2","09-02","루피니빈효능, 50%에서 30%로 줄인 이유","루피니빈효능","식단","published",172,90,45,1,"224398560843","수치형",""],
+["sep-3","09-03","투석 환자 추석 음식, 이건 빼고 먹습니다","투석 환자 추석 음식","식단","published",172,108,4,1,"224399818634","실패담형",""],
+["sep-4","09-04","나토키나제 알아봤다가 결국 안 먹은 이유","나토키나제","식단","published",150,103,null,1,"224401041137","실패담형",""],
+["sep-5","09-05","낫토효능, 당뇨 20년차가 본 것","낫토효능","식단","published",177,151,null,1,"224401934006","상황묘사형",""],
+["sep-7-1","09-07","알부민효능 투석 준비하며 알아본 이유","알부민효능","식단","published",148,53,null,1,"224403714890","상황묘사형",""],
+["sep-7-2","09-07","우하라 다녀온 후기 추석선물세트 직접 먹어봤습니다","추석선물세트","시즌","published",152,97,null,0,"224403881351","후기형",""],
+["sep-8","09-08","여주환 혈당 138에서 103 됐지만 그만둔 이유","여주환","식단","published",151,99,null,1,"224404845505","수치형",""],
+["sep-9-1","09-09","연휴 병원 찾기 열었다는데 닫혀 있었어요","연휴 병원","제도","published",163,68,null,0,"224406027889","실패담형",""],
+["sep-9-2","09-09","카무트효소효능 일주일 제가 그만둔 이유","카무트 효소","식단","published",135,53,null,1,"224406341327","수치형",""],
+["sep-9-3","09-09","복막투석 배액량 2433 계절 바뀌니 달라졌어요","복막투석 배액","당사자","published",143,63,null,0,"224406367399","수치형",""],
+["sep-10-1","09-10","돼지 신장 이식 뉴스 투석 10년차의 복잡한 마음","돼지 신장 이식","당사자","published",151,61,null,0,"224406865981","상황묘사형",""],
+["sep-10-2","09-10","여주 효소 여주환 먹던 제가 사기 전에 알아본 것","여주 효소","식단","published",142,62,null,1,"224406892689","상황묘사형",""],
+["sep-10-3","09-10","신장장애 등록 투석 시작하고 알게 된 혜택 정리","신장장애 등록","제도","published",174,75,null,0,"224406930469","정리형",""],
+["sep-11-1","09-11","호로파효능 찾다가 신장 때문에 멈춘 이야기","호로파","식단","published",165,77,null,1,"224408491731","실패담형",""],
+["sep-11-2","09-11","저칼륨 조리법 데치면 정말 빠질까 해봤어요","칼륨 빼는 법","식단","published",176,79,null,1,"224408032641","실패담형",""],
+["sep-12","09-12","칼륨 수치 높을 때 투석 10년차가 조심하는 것","칼륨 수치 높을 때","당사자","published",182,113,null,0,"224409171557","상황묘사형",""],
+["sep-13-1","09-13","오메가3 rTG 3개월 솔직히 느낌은 이랬어요","오메가3 rTG","식단","published",138,69,null,1,"224410189517","상황묘사형",""],
+["sep-13-2","09-13","산정특례 재등록 5년 지나면 이렇게 됩니다","산정특례 재등록","제도","published",150,82,null,0,"224410203205","수치형",""],
+["sep-14-1","09-14","갑상선암증상 저는 없었어요 인수치 때문에 발견한 이야기","인 수치","당사자","published",123,39,null,0,"224411337924","실패담형",""],
+["sep-14-2","09-14","덱스트린 꾸준히 먹어본 후기 혈당 화장실 체중 솔직히 말할게요","알파시클로덱스트린","식단","published",113,38,null,1,"224411271872","후기형",""],
+["sep-14-3","09-14","눈 건조증 관리하는 법 올해 안과도 못 간 당뇨 20년차 이야기","눈 건조증","당사자","published",145,66,null,1,"224411496814","상황묘사형",""],
+["sep-15-1","09-15","비타민D 1000IU와 2000IU 신장 나쁘면 어느 걸 골라야 하나","비타민D 1000IU","식단","published",138,57,null,1,"224412130262","질문형",""],
+["sep-15-2","09-15","크레아티닌 17mg/dL 처음엔 그냥 높네 했어요","크레아티닌 수치","당사자","published",143,58,null,0,"224412274787","수치형",""],
+["sep-15-3","09-15","계란 하루 몇 개 복막투석 10년차가 흰자만 먹는 이유","계란 하루 몇개","식단","published",136,51,30,1,"224412709580","수치형",""],
+["sep-16","09-16","장애인연금 장애수당 차이 등록하며 헷갈렸어요","장애인연금 장애수당","제도","published",159,103,null,0,"224413823484","질문형","쇼핑링크 0개"],
+["sep-17","09-17","투석 빈혈 헤모글로빈 8.9에서 10.3까지","투석 빈혈","당사자","published",140,92,null,0,"224414979707","상황묘사형","쇼핑링크 0개"],
+["sep-18","09-18","복막투석 복막염 징후, 제가 배운 신호","복막염 증상","당사자","scheduled",null,null,null,0,"","상황묘사형",""],
+["sep-19","09-19","외식할 때 제가 고르는 메뉴","투석 외식","식단","draft_ready",null,null,null,0,"","상황묘사형",""],
+["sep-20","09-20","의료비 세액공제, 투석 환자가 챙길 것","의료비 세액공제","제도","scheduled",null,null,null,0,"","수치형",""],
+["sep-21","09-21","독감 예방접종 오늘 시작, 대상별 일정 정리","독감 예방접종","시즌","scheduled",null,null,null,0,"","정리형","당일 발행 필수"],
+["sep-22","09-22","투석하면 가려운 이유, 10년 겪은 것","투석 가려움","당사자","scheduled",null,null,null,0,"","질문형",""],
+["sep-23","09-23","추석 전 마지막 평일, 투석 환자가 오늘 해둘 것","추석 전 준비","시즌","scheduled",null,null,null,0,"","체크리스트형","추석 연휴 대비 병원/투석액 점검"],
+["sep-24","09-24","추석 귀성길 복막투석, 5시간 이동 전에 확인한 것","복막투석 장거리이동","시즌","scheduled",null,null,null,0,"","상황묘사형","이동시 카테터 및 소모품 관리"],
+["sep-25","09-25","복막투석 10년차의 추석 하루","복막투석 추석 일상","당사자","scheduled",null,null,null,0,"","상황묘사형","추석 당일 기록"],
+["sep-26","09-26","명절 지나고 붓기, 저는 이렇게 봅니다","명절 후 부종","당사자","scheduled",null,null,null,0,"","수치형",""],
+["sep-27","09-27","연휴 끝나고 체중과 수분 되돌리기","명절 후 체중 증가","당사자","scheduled",null,null,null,0,"","수치형",""],
+["sep-28","09-28","장애인 보장구 지원, 신청해본 기록","장애인 보장구","제도","scheduled",null,null,null,0,"","상황묘사형",""],
+["sep-29","09-29","투석하고 입맛이 없을 때","투석 식욕부진","당사자","draft_ready",null,null,null,0,"","실패담형",""],
+["sep-30","09-30","복막투석 10년, 9월에 배운 것","복막투석 기록","당사자","draft_ready",null,null,null,0,"","정리형","9월 결산 및 10월 다짐"],
+
+["oct-1","10-01","APD와 CAPD, 둘 다 해본 복막투석 10년차 이야기","복막투석 APD CAPD 차이","당사자","scheduled",null,null,null,0,"","실패담형",""],
+["oct-2","10-02","장기요양보험 등급, 복막투석 환자 받을 수 있나","장기요양보험 투석","제도","scheduled",null,null,null,0,"","상황묘사형",""],
+["oct-3","10-03","두부 하루 얼마나, 복막투석 단백질 대안","복막투석 두부 단백질","식단","scheduled",null,null,null,0,"","수치형",""],
+["oct-4","10-04","복막투석 샤워, 10년 동안 지켜온 방법","복막투석 샤워","당사자","scheduled",null,null,null,0,"","질문형",""],
+["oct-5","10-05","신장장애인 주차 혜택, 등록 후 몰랐던 것","신장장애인 주차","제도","scheduled",null,null,null,0,"","수치형",""],
+["oct-6","10-06","가을 고구마 감자, 투석 환자 먹어도 되나","복막투석 고구마 감자","식단","scheduled",null,null,null,0,"","질문형",""],
+["oct-7","10-07","복막투석 집 준비, 투석액 둘 공간부터 정했어요","복막투석 집 준비 수납","당사자","scheduled",null,null,null,0,"","실패담형",""],
+["oct-8","10-08","신장이식 대기 등록, 복막투석 10년차가 알아본 절차","신장이식 대기 등록","제도","scheduled",null,null,null,0,"","상황묘사형",""],
+["oct-9","10-09","투석 환자 단백질, 하루 얼마나 챙기나","복막투석 단백질","식단","scheduled",null,null,null,0,"","수치형",""],
+["oct-10","10-10","가족에게 투석 얘기, 어떻게 꺼냈나","복막투석 가족","당사자","scheduled",null,null,null,0,"","질문형",""],
+["oct-11","10-11","복막투석 변비, 투석액이 원인일 수 있어요","복막투석 변비","당사자","scheduled",null,null,null,0,"","상황묘사형",""],
+["oct-12","10-12","당뇨 투석 저혈당, 간식 어떻게 챙기나","복막투석 저혈당 간식","식단","scheduled",null,null,null,0,"","실패담형",""],
+["oct-13","10-13","복막투석 10년, 그만두고 싶었던 순간","복막투석 힘든 순간","당사자","scheduled",null,null,null,0,"","상황묘사형",""],
+["oct-14","10-14","투석 의료비, 실제로 얼마 드나 직접 정리해봤어요","복막투석 의료비","제도","scheduled",null,null,null,0,"","수치형",""],
+["oct-15","10-17","투석액 농도 1.5와 4.25, 언제 어떻게 쓰는지","복막투석 투석액 농도","당사자","scheduled",null,null,null,0,"","질문형",""],
+["oct-16","10-16","당뇨 투석 둘 다, 제가 정한 저탄수화물 기준","당뇨 투석 저탄수화물","식단","scheduled",null,null,null,0,"","실패담형",""],
+["oct-17","10-15","혈당 관련 성분 6가지, 9월에 알아본 것 정리","혈당 성분 보충제","영양제","draft_ready",null,null,null,1,"","수치형","원고: 혈당성분-허브글.txt · 쇼핑링크 1번 · 쇼핑링크 허용 기간 첫날(10/17→10/15로 옮김)"],
+["oct-18","10-18","복막투석 여행, 1박 2일 준비한 것","복막투석 여행","당사자","scheduled",null,null,null,0,"","상황묘사형",""],
+["oct-19","10-19","국물 없이 먹는 습관, 5년 지나니 이게 더 편해요","투석 식단 국물 줄이기","식단","scheduled",null,null,null,0,"","실패담형",""],
+["oct-20","10-22","의료급여 수급권, 복막투석 환자 신청 기준","의료급여 수급권","제도","scheduled",null,null,null,0,"","수치형",""],
+["oct-21","10-21","투석하면서 직장 다니기, 가능한가","투석 직장 생활","당사자","scheduled",null,null,null,0,"","질문형",""],
+["oct-22","10-20","알파리포산, 당뇨 신경 때문에 찾아봤어요","알파리포산 당뇨 신경","영양제","scheduled",null,null,null,1,"","상황묘사형","쇼핑링크 2번 (10/22→10/20으로 옮김)"],
+["oct-23","10-23","복막투석 건체중, 재는 방법이 있어요","복막투석 건체중","당사자","scheduled",null,null,null,0,"","수치형",""],
+["oct-24","10-24","인 낮추는 가공식품, 제가 먼저 걸렀어요","복막투석 인 가공식품","식단","scheduled",null,null,null,0,"","실패담형",""],
+["oct-25","10-27","복막투석 복압감, 교환 때 느끼는 배 불편","복막투석 복압","당사자","scheduled",null,null,null,0,"","질문형",""],
+["oct-26","10-26","긴급복지지원, 복막투석 환자도 신청할 수 있나","긴급복지지원 신청","제도","scheduled",null,null,null,0,"","상황묘사형",""],
+["oct-27","10-25","프로폴리스, 신장 나쁘면 먹어도 될까 확인한 것","프로폴리스 신장","영양제","scheduled",null,null,null,1,"","수치형","쇼핑링크 3번 (10/27→10/25로 옮김)"],
+["oct-28","10-28","복막투석 환자 국밥, 국물 어떻게 먹나","투석 환자 국밥","식단","scheduled",null,null,null,0,"","실패담형",""],
+["oct-29","10-29","복막투석과 치과 치료, 확인해야 할 것","투석 치과 치료","당사자","scheduled",null,null,null,0,"","상황묘사형",""],
+["oct-30","10-30","홍경천과 마카, 기운 때문에 둘 다 찾아봤어요","홍경천 마카 피로","영양제","draft_ready",null,null,null,1,"","실패담형","원고: 홍경천-마카.txt · 쇼핑링크 4번"],
+["oct-31","10-31","복막투석 10월 마무리, 이번 달 배운 것","복막투석 기록","당사자","scheduled",null,null,null,0,"","수치형","10월 한 달 운영 결산"]
+];
+
+const DEFAULTS = RAW.map(r => ({
+  id:r[0], iso:YEAR+'-'+r[1], title:r[2], keyword:r[3], cat:r[4], status:r[5],
+  likes:r[6], comments:r[7], views:r[8], shopping:!!r[9],
+  url:r[10] ? 'https://blog.naver.com/hjw1997/'+r[10] : '', neo:r[11], memo:r[12]
+}));
+
+/* ============ 운영 규칙 (자동 점검 기준) ============ */
+const RULES = {
+  zero:  { from:'2026-09-16', to:'2026-10-14', label:'재활 기간(9/16~10/14) 쇼핑링크 0편' },
+  after: { from:'2026-10-15', perMonth:4, minGap:5 },   // 10/15부터 매달 최대 4편, 5일 이상 간격
+  statsDay: 7                                           // 조회수는 발행 7일 뒤에 기록
+};
+const CHECKS = [
+  { k:'publish', t:'오늘 글 발행하기' },
+  { k:'shop',    t:'쇼핑링크 규칙 지켰는지 확인하기' },
+  { k:'url',     t:'발행한 글 주소(URL) 기록하기' },
+  { k:'reply',   t:'새 댓글에 답글 달기' },
+  { k:'stats',   t:'7일 전 글 조회수·공감·댓글 기록하기' }
+];
+const SEASON_RE = /추석|명절|연휴|귀성|오늘 시작/;
+const isSeasonal = p => p.cat === '시즌' || SEASON_RE.test(p.title) || /당일/.test(p.memo || '');
+const CAT_NAME = { '당사자':'당사자', '제도':'제도·혜택', '식단':'식단', '시즌':'시즌', '영양제':'성분·영양제' };
+const CAT_CLS  = { '당사자':'c1', '제도':'c2', '식단':'c3', '시즌':'c4', '영양제':'c5' };
+const ST_NAME  = { published:'발행 완료', draft_ready:'원고 완성', scheduled:'작성 예정', overdue:'밀림' };
+const WD = ['일','월','화','수','목','금','토'];
+
+/* ============ 날짜 도구 ============ */
+const pad = n => String(n).padStart(2,'0');
+const isoOf = d => d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const parseIso = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+const addDays = (iso, n) => { const d = parseIso(iso); d.setDate(d.getDate()+n); return isoOf(d); };
+const diffDays = (a, b) => Math.round((parseIso(b) - parseIso(a)) / 86400000);
+const label = iso => { const d = parseIso(iso); return (d.getMonth()+1)+'월 '+d.getDate()+'일 ('+WD[d.getDay()]+')'; };
+const short = iso => { const d = parseIso(iso); return (d.getMonth()+1)+'/'+d.getDate(); };
+const TODAY = isoOf(new Date());
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm = s => String(s || '').replace(/[\s,.!?·'"~()\-]/g,'').toLowerCase();
+
+/* ============ 저장 (기본 데이터 + 내가 고친 내용 분리 보관) ============
+   → 새 버전 파일을 받아도 내가 입력한 내용은 유지되고, 새 일정도 함께 보여요. */
+const KEY = 'ujusaek_calendar_v2';
+let canStore = true;
+const mem = {};
+function sGet(k){ try { return localStorage.getItem(k); } catch(e){ canStore = false; return mem[k] || null; } }
+function sSet(k,v){ try { localStorage.setItem(k,v); } catch(e){ canStore = false; mem[k] = v; } }
+function sDel(k){ try { localStorage.removeItem(k); } catch(e){} delete mem[k]; }
+
+function emptyState(){ return { v:2, edits:{}, custom:[], deleted:{}, checks:{}, scale:18 }; }
+function loadState(){
+  try {
+    const s = JSON.parse(sGet(KEY));
+    if (s && s.v === 2) return Object.assign(emptyState(), s);
+  } catch(e){}
+  const s = emptyState();
+  migrateOld(s);
+  return s;
+}
+/* 예전 캘린더에서 입력한 숫자·상태·주소를 가져오기 */
+function migrateOld(s){
+  const byId = {}; DEFAULTS.forEach(p => byId[p.id] = p);
+  let n = 0;
+  ['hjw1997_aug_posts','hjw1997_sept_posts','hjw1997_oct_posts'].forEach(k => {
+    let arr; try { arr = JSON.parse(sGet(k)); } catch(e){ return; }
+    if (!Array.isArray(arr)) return;
+    arr.forEach(o => {
+      const d = byId[o.id]; if (!d) return;
+      const e = {};
+      ['title','keyword','neo','url','status'].forEach(f => {
+        if (typeof o[f] !== 'string' || o[f] === '' || o[f] === d[f]) return;
+        if (f === 'status' && !['scheduled','draft_ready','published'].includes(o[f])) return;
+        if (f === 'url' && !/^https?:\/\//i.test(o[f])) return;
+        e[f] = o[f];
+      });
+      ['views','likes','comments'].forEach(f => { const v = Number(o[f]); if (v > 0 && v !== d[f]) e[f] = v; });
+      if (Object.keys(e).length){ s.edits[o.id] = e; n++; }
+    });
+  });
+  if (n) s._migrated = n;
+}
+let state = loadState();
+function save(){ sSet(KEY, JSON.stringify(state)); }
+
+function allPosts(){
+  const list = DEFAULTS.filter(p => !state.deleted[p.id]).map(p => Object.assign({}, p, state.edits[p.id] || {}));
+  return list.concat(state.custom.map(p => Object.assign({}, p))).sort((a,b) => a.iso < b.iso ? -1 : a.iso > b.iso ? 1 : a.id < b.id ? -1 : 1);
+}
+function getPost(id){ return allPosts().find(p => p.id === id); }
+function isCustom(id){ return state.custom.some(p => p.id === id); }
+function updatePost(id, fields){
+  if (isCustom(id)) { Object.assign(state.custom.find(p => p.id === id), fields); }
+  else {
+    const def = DEFAULTS.find(p => p.id === id);
+    const e = Object.assign({}, state.edits[id] || {}, fields);
+    Object.keys(e).forEach(k => { if (e[k] === def[k]) delete e[k]; });
+    if (Object.keys(e).length) state.edits[id] = e; else delete state.edits[id];
+  }
+  save();
+}
+const isOverdue = p => p.status !== 'published' && p.iso < TODAY;
+const viewSt = p => isOverdue(p) ? 'overdue' : p.status;
+// "1,234" "1234회" 처럼 넣어도 숫자만 골라서 저장
+const toNum = s => { const r = String(s == null ? '' : s).replace(/[^\d]/g,''); return r === '' ? null : parseInt(r,10); };
+const hasNum = v => v !== null && v !== undefined && v !== '' && !isNaN(v);
+
+/* ============ 자동 점검 ============ */
+function firstFreeDay(posts, from){
+  const used = new Set(posts.map(p => p.iso));
+  let d = from < TODAY ? TODAY : from;
+  for (let i=0; i<400; i++){ if (!used.has(d)) return d; d = addDays(d,1); }
+  return d;
+}
+function kwWords(k){ return String(k||'').split(/\s+/).map(norm).filter(Boolean); }
+function similarKw(a, b){
+  const na = norm(a), nb = norm(b);
+  if (!na || !nb) return false;
+  if (na === nb) return true;
+  const [s, l] = na.length <= nb.length ? [na, nb] : [nb, na];
+  if (s.length >= 4 && l.includes(s)) return true;
+  const wa = kwWords(a), wb = kwWords(b);
+  const [ws, wl] = wa.length <= wb.length ? [wa, wb] : [wb, wa];
+  return ws.length >= 2 && ws.every(w => wl.includes(w));
+}
+function runChecks(){
+  const posts = allPosts();
+  const out = [];
+
+  // 1) 밀린 글 (시즌 글은 따로)
+  const over = posts.filter(isOverdue);
+  const overSeason = over.filter(isSeasonal), overNormal = over.filter(p => !isSeasonal(p));
+  if (overNormal.length) out.push({ lv:'red', t:'날짜가 지났는데 발행 표시가 안 된 글 '+overNormal.length+'편',
+    d:'이미 발행했다면 [발행했어요]를 눌러주세요. 아직이면 [빈 날로 옮기기]를 누르면 일정이 비어 있는 가장 가까운 날로 옮겨져요.', posts:overNormal, act:'pub' });
+  if (overSeason.length) out.push({ lv:'orange', t:'시기가 지난 시즌 글 '+overSeason.length+'편 (추석·명절·당일 글)',
+    d:'날짜만 옮기면 시기가 맞지 않아 어색해요. 이미 발행했다면 [발행했어요], 아니면 제목을 바꾸거나 [열기]에서 삭제해주세요.', posts:overSeason, act:'season' });
+
+  // 2) 쇼핑링크 규칙 ① - 재활 기간 0편
+  const z = RULES.zero;
+  const inZero = posts.filter(p => p.shopping && p.iso >= z.from && p.iso <= z.to);
+  if (inZero.length) out.push({ lv:'red', t:'쇼핑링크 규칙 위반: '+z.label, d:'이 기간에 쇼핑링크 글이 '+inZero.length+'편 있어요. 링크를 빼주세요.', posts:inZero });
+
+  // 2-2) 10/15 이후 - 매달 최대 4편, 5일 이상 간격 (달이 바뀌어도 간격 확인)
+  const a = RULES.after;
+  const shopAfter = posts.filter(p => p.shopping && p.iso >= a.from);
+  const byMonth = {};
+  shopAfter.forEach(p => (byMonth[p.iso.slice(0,7)] = byMonth[p.iso.slice(0,7)] || []).push(p));
+  Object.keys(byMonth).forEach(m => {
+    if (byMonth[m].length > a.perMonth) out.push({ lv:'red', t:'쇼핑링크 규칙 위반: '+Number(m.slice(5))+'월 쇼핑링크 '+byMonth[m].length+'편 (최대 '+a.perMonth+'편)',
+      d:(byMonth[m].length - a.perMonth)+'편에서 링크를 빼거나 다음 달로 옮겨주세요.', posts:byMonth[m] });
+  });
+  for (let i=1; i<shopAfter.length; i++){
+    const g = diffDays(shopAfter[i-1].iso, shopAfter[i].iso);
+    if (g < a.minGap) out.push({ lv:'red', t:'쇼핑링크 규칙 위반: 간격이 '+g+'일뿐이에요 ('+short(shopAfter[i-1].iso)+' → '+short(shopAfter[i].iso)+')',
+      d:'쇼핑링크 글은 '+a.minGap+'일 이상 띄워야 해요. 한 편의 날짜를 옮기거나 링크를 빼주세요.'+
+        (shopAfter.length === 4 && shopAfter[0].iso.slice(0,7) === '2026-10' ? ' 추천: 10월 4편은 10/15·10/20·10/25·10/30에 두면 규칙을 지킬 수 있어요.' : ''),
+      posts:[shopAfter[i-1], shopAfter[i]] });
+  }
+
+  // 3) 중복 제목 / 비슷한 키워드 (아직 발행 안 한 글이 이전 글과 겹칠 때)
+  posts.forEach((p, idx) => {
+    if (p.status === 'published') return;
+    const prev = posts.slice(0, idx).concat(posts.slice(idx+1).filter(q => q.iso === p.iso && q.status === 'published'));
+    const sameT = prev.find(q => norm(q.title) === norm(p.title));
+    if (sameT) { out.push({ lv:'red', t:'제목이 똑같은 글이 있어요', d:short(sameT.iso)+(sameT.status==='published'?'에 이미 발행한':' 예정인')+' 글과 제목이 같아요. 제목과 내용 관점을 바꿔주세요.', posts:[sameT, p] }); return; }
+    const simK = prev.find(q => similarKw(q.keyword, p.keyword));
+    if (simK) out.push({ lv:'orange', t:'키워드가 겹쳐요: "'+p.keyword+'" ↔ "'+simK.keyword+'"', d:short(simK.iso)+' 글과 키워드가 같거나 비슷해요. 서로 검색 순위를 뺏을 수 있으니 키워드를 조금 바꿔주세요.', posts:[simK, p] });
+  });
+
+  // 4) 하루 2편 이상 (오늘부터, 발행 글 포함)
+  const byDay = {};
+  posts.filter(p => p.iso >= TODAY).forEach(p => (byDay[p.iso] = byDay[p.iso] || []).push(p));
+  Object.keys(byDay).forEach(d => {
+    const l = byDay[d];
+    if (l.length > 1 && l.some(p => p.status !== 'published')) out.push({ lv:'orange', t:short(d)+'에 '+l.length+'편이 잡혀 있어요', d:'하루 1편 규칙이에요. 한 편을 [빈 날로 옮기기]로 옮겨주세요.', posts:l, act:'move' });
+  });
+
+  // 5) 주소 없음
+  const nourl = posts.filter(p => p.status === 'published' && !p.url);
+  if (nourl.length) out.push({ lv:'orange', t:'발행했는데 주소가 없는 글 '+nourl.length+'편', d:'블로그 글 주소를 넣어두면 바로 열어볼 수 있어요.', posts:nourl });
+
+  // 6) 일주일 안에 원고가 없는 글
+  const soon = posts.filter(p => p.status === 'scheduled' && p.iso >= TODAY && p.iso <= addDays(TODAY, 7));
+  if (soon.length) out.push({ lv:'blue', t:'7일 안에 올릴 글 중 원고가 아직 없는 글 '+soon.length+'편', d:'원고를 다 쓰면 상태를 [원고 완성]으로 바꿔주세요.', posts:soon });
+
+  // 7) 조회수 미입력 (최근 30일만 알림, 나머지는 목록 필터에서)
+  const nostAll = posts.filter(p => p.status === 'published' && p.iso <= addDays(TODAY, -RULES.statsDay) && !hasNum(p.views));
+  const nost = nostAll.filter(p => p.iso >= addDays(TODAY, -30));
+  if (nostAll.length) out.push({ lv:'blue', t:'발행 7일이 지났는데 조회수가 비어 있는 글 '+nostAll.length+'편',
+    d:'네이버 블로그 [통계]에서 확인해 아래 목록에 입력해요. 최근 글부터 보여드려요.', posts:(nost.length ? nost : nostAll).slice().reverse(), filter:'nostats' });
+
+  const order = { red:0, orange:1, blue:2 };
+  return out.sort((x,y) => order[x.lv] - order[y.lv]);
+}
+
+/* ============ 화면 그리기 ============ */
+const $ = id => document.getElementById(id);
+let curYM = TODAY.slice(0,7);
+let curFilter = 'all';
+let searchTerm = '';
+
+function badgeSt(p){ const s = viewSt(p); return '<span class="badge st-'+s+'">'+ST_NAME[s]+'</span>'; }
+function badgeCat(p){ return '<span class="badge '+(CAT_CLS[p.cat]||'c0')+'">'+esc(CAT_NAME[p.cat]||p.cat)+'</span>'; }
+function badgeShop(p){ return p.shopping ? '<span class="badge shop">🛒 쇼핑링크</span>' : ''; }
+
+function renderToday(){
+  $('todayLabel').textContent = '오늘 ' + label(TODAY);
+  const posts = allPosts();
+  const today = posts.filter(p => p.iso === TODAY);
+  const next = posts.find(p => p.iso > TODAY && p.status !== 'published');
+  let h = '<b style="color:var(--navy)">오늘 올릴 글</b>';
+  if (!today.length){
+    h += '<p class="muted">오늘 예정된 글이 없어요.</p>';
+    if (next) h += '<div class="today-post"><span class="muted">다음 예정 · '+label(next.iso)+'</span><h3>'+esc(next.title)+'</h3>'+badgeSt(next)+' '+badgeCat(next)+'<div class="row"><button class="btn" data-open="'+next.id+'">자세히 보기</button></div></div>';
+  }
+  today.forEach(p => {
+    h += '<div class="today-post">'+badgeSt(p)+' '+badgeCat(p)+' '+badgeShop(p)+
+      '<h3>'+esc(p.title)+'</h3>'+
+      '<div class="muted" style="font-size:.9rem">키워드 <b>'+esc(p.keyword)+'</b>'+(p.neo?' · 글 유형 '+esc(p.neo):'')+(p.memo?' · '+esc(p.memo):'')+'</div>'+
+      '<div class="row">'+
+        (p.status !== 'published' ? '<button class="btn primary big" data-pub="'+p.id+'">✓ 발행했어요</button>' : '<span class="badge st-published" style="padding:8px 14px">✓ 오늘 발행 완료</span>')+
+        '<button class="btn" data-copy="'+p.id+'">제목 복사</button>'+
+        '<button class="btn" data-open="'+p.id+'">수정</button>'+
+        (p.url ? '<a class="btn" href="'+esc(p.url)+'" target="_blank" rel="noopener">글 열기 ↗</a>' : '')+
+      '</div></div>';
+  });
+  const wk = posts.filter(p => p.iso === addDays(TODAY,-RULES.statsDay) && p.status === 'published' && !hasNum(p.views));
+  if (wk.length) h += '<p class="muted" style="font-size:.85rem;margin:6px 0 0">📌 7일 전('+short(wk[0].iso)+') 글 '+wk.length+'편의 조회수를 기록할 날이에요. <button class="more" data-open="'+wk[0].id+'">지금 입력하기</button></p>';
+  $('todayPosts').innerHTML = h;
+
+  const c = state.checks[TODAY] || {};
+  $('checkList').innerHTML = CHECKS.map(x => '<li class="'+(c[x.k]?'done':'')+'"><label><input type="checkbox" data-chk="'+x.k+'" '+(c[x.k]?'checked':'')+'>'+x.t+'</label></li>').join('');
+  const done = CHECKS.filter(x => c[x.k]).length;
+  $('checkCount').textContent = done+' / '+CHECKS.length+' 완료';
+  $('checkBar').style.width = (done / CHECKS.length * 100)+'%';
+}
+
+function alertLi(a, p){
+  const pub = p.status !== 'published';
+  let b = '';
+  if ((a.act === 'pub' || a.act === 'season') && pub) b += '<button class="btn sm primary" data-pub="'+p.id+'">발행했어요</button>';
+  if ((a.act === 'pub' || a.act === 'move') && pub) b += '<button class="btn sm" data-move="'+p.id+'">빈 날로 옮기기</button>';
+  b += '<button class="btn sm" data-open="'+p.id+'">열기</button>';
+  return '<li><span class="badge st-'+viewSt(p)+'">'+short(p.iso)+'</span><span class="grow">'+esc(p.title)+'</span>'+b+'</li>';
+}
+function renderAlerts(){
+  const list = runChecks();
+  window._alerts = list;
+  if (!list.length){ $('alerts').innerHTML = '<div class="alert ok"><div class="t">✓ 문제없어요!</div><div class="d">모든 규칙을 잘 지키고 있어요.</div></div>'; return; }
+  const one = (a, i) => {
+    const show = a.posts.slice(0, 5), rest = a.posts.length - show.length;
+    const moreBtn = rest > 0 ? (a.filter ? '<button class="more" data-jump="'+a.filter+'">▼ 전체 목록에서 보기</button>' :
+      '<button class="more" data-expand="'+i+'">▼ 나머지 '+rest+'편 더 보기</button>') : '';
+    return '<div class="alert '+a.lv+'"><div class="t">'+(a.lv==='red'?'🔴 ':a.lv==='orange'?'🟠 ':'🔵 ')+esc(a.t)+'</div><div class="d">'+esc(a.d)+'</div><ul id="al-'+i+'">'+show.map(p => alertLi(a,p)).join('')+'</ul>'+moreBtn+'</div>';
+  };
+  const main = list.map((a,i) => a.lv !== 'blue' ? one(a,i) : '').join('');
+  const blues = list.map((a,i) => a.lv === 'blue' ? one(a,i) : '').join('');
+  const nb = list.filter(a => a.lv === 'blue').length;
+  $('alerts').innerHTML = (main || '<div class="alert ok"><div class="t">✓ 꼭 해결할 문제는 없어요</div></div>') +
+    (nb ? '<details><summary style="cursor:pointer;font-weight:800;color:var(--blue);padding:6px 2px">🔵 참고할 내용 '+nb+'건 보기</summary>'+blues+'</details>' : '');
+}
+
+function renderKpis(){
+  const pub = allPosts().filter(p => p.status === 'published');
+  const withV = pub.filter(p => hasNum(p.views));
+  const sum = f => pub.reduce((s,p) => s + (Number(p[f])||0), 0);
+  const shop = pub.filter(p => p.shopping).length;
+  const k = [
+    ['발행한 글', pub.length+'편', '전체 계획 '+allPosts().length+'편'],
+    ['조회수 합계', sum('views').toLocaleString()+'회', '기록된 글 '+withV.length+' / '+pub.length+'편 기준'],
+    ['공감 합계', sum('likes').toLocaleString()+'개', '글당 평균 '+(pub.length?Math.round(sum('likes')/pub.length):0)],
+    ['댓글 합계', sum('comments').toLocaleString()+'개', '글당 평균 '+(pub.length?Math.round(sum('comments')/pub.length):0)],
+    ['쇼핑링크 비율', (pub.length?Math.round(shop/pub.length*100):0)+'%', '발행 글 중 '+shop+'편']
+  ];
+  $('kpis').innerHTML = k.map(x => '<div class="kpi"><div class="l">'+x[0]+'</div><div class="v">'+x[1]+'</div><div class="s">'+x[2]+'</div></div>').join('');
+}
+
+function renderMonth(){
+  const [y, m] = curYM.split('-').map(Number);
+  $('monthTitle').textContent = y+'년 '+m+'월';
+  const posts = allPosts();
+  const mp = posts.filter(p => p.iso.slice(0,7) === curYM);
+  const pub = mp.filter(p => p.status === 'published').length;
+  const drf = mp.filter(p => p.status === 'draft_ready').length;
+  const ovd = mp.filter(isOverdue).length;
+  const shp = mp.filter(p => p.shopping).length;
+  const pubList = mp.filter(p => p.status === 'published');
+  const vRec = pubList.filter(p => hasNum(p.views)).length;
+  $('monthSum').innerHTML =
+    '<span>계획 '+mp.length+'편</span><span>발행 '+pub+'편</span><span>원고 완성 '+drf+'편</span>'+
+    (ovd ? '<span class="warn">밀림 '+ovd+'편</span>' : '')+
+    '<span>쇼핑링크 '+shp+'편 ('+(mp.length?Math.round(shp/mp.length*1000)/10:0)+'%)</span>'+
+    '<span>조회수 기록 '+vRec+' / '+pubList.length+'편</span>';
+
+  const first = new Date(y, m-1, 1), days = new Date(y, m, 0).getDate();
+  let h = WD.map((w,i) => '<div class="wd '+(i===0?'sun':i===6?'sat':'')+'">'+w+'</div>').join('');
+  for (let i=0; i<first.getDay(); i++) h += '<div class="day empty"></div>';
+  for (let d=1; d<=days; d++){
+    const iso = y+'-'+pad(m)+'-'+pad(d), wd = (first.getDay()+d-1) % 7;
+    const dp = mp.filter(p => p.iso === iso);
+    const chips = dp.slice(0,2).map(p => '<button class="chip '+viewSt(p)+(p.shopping?' shopflag':'')+'" data-open="'+p.id+'" title="'+esc(p.title)+'">'+(p.shopping?'🛒':'')+esc(p.title)+'</button>').join('');
+    h += '<div class="day '+(iso===TODAY?'today ':'')+(iso<TODAY?'past':'')+'" data-add="'+iso+'"><span class="n '+(wd===0?'sun':wd===6?'sat':'')+'">'+d+(dp.length>1?' <span class="plus" style="color:var(--amber)">⚠'+dp.length+'편</span>':'')+'</span>'+chips+(dp.length>2?'<span class="plus">+'+(dp.length-2)+'편 더</span>':'')+'</div>';
+  }
+  $('cal').innerHTML = h;
+  renderRows();
+}
+
+function renderRows(){
+  let list = searchTerm ? allPosts() : allPosts().filter(p => p.iso.slice(0,7) === curYM);
+  if (searchTerm) list = list.filter(p => norm(p.title+p.keyword).includes(norm(searchTerm)));
+  if (curFilter === 'overdue') list = list.filter(isOverdue);
+  if (curFilter === 'todo') list = list.filter(p => p.status !== 'published');
+  if (curFilter === 'nostats') list = list.filter(p => p.status === 'published' && !hasNum(p.views));
+  if (curFilter === 'shop') list = list.filter(p => p.shopping);
+  if (!list.length){ $('rows').innerHTML = '<p class="muted" style="text-align:center;padding:20px">해당하는 글이 없어요.</p>'; return; }
+  const num = (p,f,l) => '<div><label>'+l+'</label><input type="text" inputmode="numeric" data-stat="'+f+'" data-id="'+p.id+'" value="'+(hasNum(p[f])?p[f]:'')+'" class="'+(p.status==='published'&&!hasNum(p[f])&&f==='views'?'empty':'')+'" '+
+    (p.status!=='published' ? 'disabled title="발행한 뒤에 입력할 수 있어요" placeholder="-"' : (f==='views' && p.viewsAt ? 'title="'+short(p.viewsAt)+'에 기록"' : ''))+'></div>';
+  $('rows').innerHTML = list.map(p =>
+    '<div class="prow '+(isOverdue(p)?'is-overdue':'')+'">'+
+      '<div class="dt">'+label(p.iso)+'</div>'+
+      '<div><div class="tt" data-open="'+p.id+'">'+esc(p.title)+'</div><div class="meta">'+badgeCat(p)+badgeShop(p)+'<span class="muted" style="font-size:.75rem">'+esc(p.keyword)+'</span></div></div>'+
+      '<div><select data-status="'+p.id+'" aria-label="상태">'+['scheduled','draft_ready','published'].map(s => '<option value="'+s+'" '+(p.status===s?'selected':'')+'>'+(isOverdue(p)&&p.status===s?'⚠ ':'')+ST_NAME[s]+'</option>').join('')+'</select></div>'+
+      '<div class="stats">'+num(p,'views','조회')+num(p,'likes','공감')+num(p,'comments','댓글')+'</div>'+
+      '<div class="acts"><button class="btn sm" data-copy="'+p.id+'" title="제목 복사">복사</button>'+
+        (p.url ? '<a class="btn sm" href="'+esc(p.url)+'" target="_blank" rel="noopener" title="블로그 글 열기">↗</a>' : '')+'</div>'+
+    '</div>').join('');
+}
+
+function renderAll(){ renderToday(); renderAlerts(); renderKpis(); renderMonth(); }
+
+/* ============ 알림 메시지 ============ */
+let toastTimer;
+function toast(msg){ const t = $('toast'); (($('dlg').open) ? $('dlg') : document.body).appendChild(t); t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2600); }
+function copyTitle(id){
+  const p = getPost(id); if (!p) return;
+  const done = () => toast('제목을 복사했어요');
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(p.title).then(done, () => fallbackCopy(p.title));
+  else fallbackCopy(p.title);
+}
+function fallbackCopy(txt){
+  const ta = document.createElement('textarea'); ta.value = txt;
+  ($('dlg').open ? $('dlg') : document.body).appendChild(ta); ta.select();
+  try { if (!document.execCommand('copy')) throw 0; toast('제목을 복사했어요'); } catch(e){ prompt('아래 제목을 복사하세요', txt); }
+  ta.remove();
+}
+
+/* ============ 글 수정 창 ============ */
+let editId = null, addIso = null;
+const F = ['iso','status','title','keyword','cat','neo','shopping','url','views','likes','comments','memo'];
+function openDlg(id, opts){
+  opts = opts || {};
+  editId = id; addIso = opts.addIso || null;
+  const p = id ? getPost(id) : { iso:addIso, status:'scheduled', title:'', keyword:'', cat:'당사자', neo:'', shopping:false, url:'', views:null, likes:null, comments:null, memo:'' };
+  $('dlgTitle').textContent = id ? label(p.iso)+' 글 정보' : label(addIso)+' 새 글 추가';
+  F.forEach(f => { const el = $('f-'+f); el.value = f === 'shopping' ? (p.shopping ? '1' : '0') : (p[f] == null ? '' : p[f]); });
+  if (opts.publish) $('f-status').value = 'published';
+  $('dlgDelete').classList.toggle('hidden', !id);
+  $('dlgCopy').classList.toggle('hidden', !id);
+  $('dlgWarn').classList.toggle('hidden', !(id && isOverdue(p) && !opts.publish));
+  $('dlgWarn').textContent = '⚠ 날짜가 지났는데 아직 발행 표시가 안 됐어요. 발행했다면 상태를 [발행 완료]로, 아니면 날짜를 앞으로 옮겨주세요.';
+  $('dlg').showModal();
+  setTimeout(() => (opts.publish ? $('f-url') : $('f-title')).focus(), 50);
+}
+function readDlg(){
+  const o = {};
+  F.forEach(f => {
+    const v = $('f-'+f).value;
+    if (f === 'shopping') o[f] = v === '1';
+    else if (['views','likes','comments'].includes(f)) o[f] = toNum(v);
+    else o[f] = v.trim();
+  });
+  // 주소: https:// 없이 붙여넣어도 자동으로 붙여줌, 웹 주소가 아니면 저장 안 함
+  if (o.url && !/^https?:\/\//i.test(o.url)) o.url = /^[\w.-]+\.[a-z]{2,}(\/|$)/i.test(o.url) ? 'https://' + o.url : '';
+  return o;
+}
+$('dlgForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const o = readDlg();
+  if (!o.title || !o.iso){ toast('날짜와 제목은 꼭 넣어주세요'); return; }
+  const before = editId ? getPost(editId) : null;
+  if (o.views !== (before ? before.views : null)) o.viewsAt = o.views === null ? null : TODAY;
+  if ($('f-url').value.trim() && !o.url){ toast('주소가 올바르지 않아요. 블로그 글 주소를 다시 붙여넣어 주세요'); return; }
+  if (editId) updatePost(editId, o);
+  else { o.id = 'my-'+Date.now(); state.custom.push(o); save(); }
+  if (o.status === 'published' && o.iso === TODAY){
+    state.checks[TODAY] = Object.assign({}, state.checks[TODAY], { publish:true }, o.url ? { url:true } : {});
+    save();
+  }
+  $('dlg').close(); renderAll(); toast('저장했어요');
+});
+$('dlgCancel').onclick = () => $('dlg').close();
+$('dlg').addEventListener('close', () => renderRows()); // 취소하면 목록의 상태 선택도 원래대로
+$('dlgCopy').onclick = () => editId && copyTitle(editId);
+$('dlgGcal').onclick = () => {
+  const o = readDlg(); if (!o.iso || !o.title) return toast('날짜와 제목을 먼저 넣어주세요');
+  const d1 = o.iso.replace(/-/g,''), d2 = addDays(o.iso,1).replace(/-/g,'');
+  const url = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('[블로그] '+o.title)+
+    '&dates='+d1+'/'+d2+'&details='+encodeURIComponent('키워드: '+o.keyword+'\n'+(o.shopping?'쇼핑링크 포함':'쇼핑링크 없음')+'\n'+o.memo);
+  window.open(url, '_blank', 'noopener');
+};
+$('dlgDelete').onclick = () => {
+  if (!editId || !confirm('이 글을 캘린더에서 지울까요?')) return;
+  if (isCustom(editId)) state.custom = state.custom.filter(p => p.id !== editId);
+  else state.deleted[editId] = true;
+  save(); $('dlg').close(); renderAll(); toast('지웠어요');
+};
+
+/* ============ 클릭 한 곳에서 처리 ============ */
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-open],[data-pub],[data-move],[data-copy],[data-add],[data-expand],[data-jump],[data-scale],[data-f]');
+  if (!t) return;
+  if (t.dataset.open){ e.stopPropagation(); openDlg(t.dataset.open); }
+  else if (t.dataset.pub) openDlg(t.dataset.pub, { publish:true });
+  else if (t.dataset.move){
+    const p = getPost(t.dataset.move); if (!p) return;
+    const d = firstFreeDay(allPosts().filter(q => q.id !== p.id), TODAY);
+    if (!confirm('"'+p.title+'"\n\n'+label(p.iso)+' → '+label(d)+'(으)로 옮길까요?\n(일정이 비어 있는 가장 가까운 날이에요)')) return;
+    updatePost(p.id, { iso:d }); renderAll(); toast(label(d)+'로 옮겼어요');
+  }
+  else if (t.dataset.copy) copyTitle(t.dataset.copy);
+  else if (t.dataset.add){
+    // 글이 있는 날을 누르면 그 글을 열고, 빈 날일 때만 새 글 추가
+    const dp = allPosts().filter(p => p.iso === t.dataset.add);
+    if (dp.length) openDlg(dp[0].id); else openDlg(null, { addIso:t.dataset.add });
+  }
+  else if (t.dataset.expand){
+    const a = window._alerts[+t.dataset.expand];
+    $('al-'+t.dataset.expand).innerHTML = a.posts.map(p => alertLi(a, p)).join('');
+    t.remove();
+  }
+  else if (t.dataset.jump){ setFilter(t.dataset.jump); $('filters').scrollIntoView({ behavior:'smooth' }); }
+  else if (t.dataset.scale) setScale(+t.dataset.scale);
+  else if (t.dataset.f) setFilter(t.dataset.f);
+});
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.dataset.chk){
+    state.checks[TODAY] = Object.assign({}, state.checks[TODAY], { [t.dataset.chk]: t.checked });
+    save(); renderToday();
+    if (CHECKS.every(x => state.checks[TODAY][x.k])) toast('🎉 오늘 점검을 모두 끝냈어요!');
+  }
+  else if (t.dataset.status){
+    const p = getPost(t.dataset.status);
+    if (t.value === 'published' && !p.url){ openDlg(t.dataset.status, { publish:true }); return; }
+    updatePost(t.dataset.status, { status:t.value });
+    if (t.value === 'published' && p.iso === TODAY){ state.checks[TODAY] = Object.assign({}, state.checks[TODAY], { publish:true, url:true }); save(); }
+    renderAll(); toast('상태를 바꿨어요');
+  }
+  else if (t.dataset.stat){
+    const v = toNum(t.value);
+    const f = { [t.dataset.stat]: v };
+    if (t.dataset.stat === 'views') f.viewsAt = v === null ? null : TODAY;   // 언제 잰 조회수인지 기록
+    updatePost(t.dataset.id, f);
+    t.value = v === null ? '' : v;
+    renderToday(); renderAlerts(); renderKpis();
+    t.classList.toggle('empty', t.dataset.stat === 'views' && v === null);
+    toast(v === null ? '빈칸으로 저장했어요' : '저장했어요');
+  }
+});
+function setFilter(f){
+  curFilter = f;
+  document.querySelectorAll('#filters button').forEach(b => b.classList.toggle('on', b.dataset.f === f));
+  if (f === 'overdue' || f === 'nostats'){ // 전체 달에서 찾기
+    const hit = allPosts().find(p => f === 'overdue' ? isOverdue(p) : (p.status==='published' && !hasNum(p.views)));
+    if (hit && !allPosts().some(p => p.iso.slice(0,7) === curYM && (f==='overdue'?isOverdue(p):(p.status==='published'&&!hasNum(p.views))))){ curYM = hit.iso.slice(0,7); renderMonth(); return; }
+  }
+  renderRows();
+}
+$('search').addEventListener('input', e => { searchTerm = e.target.value.trim(); renderRows(); });
+const moveMonth = n => { const d = parseIso(curYM+'-01'); d.setMonth(d.getMonth()+n); curYM = isoOf(d).slice(0,7); renderMonth(); };
+$('prevMonth').onclick = () => moveMonth(-1);
+$('nextMonth').onclick = () => moveMonth(1);
+
+function setScale(px){
+  document.documentElement.style.fontSize = px+'px';
+  state.scale = px; save();
+  document.querySelectorAll('[data-scale]').forEach(b => b.classList.toggle('on', +b.dataset.scale === px));
+}
+
+/* ============ 연동: 캘린더 파일(.ics) ============ */
+function download(name, text, type){
+  const blob = new Blob([text], { type });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+function icsEsc(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n'); }
+function icsFold(line){
+  const enc = new TextEncoder(); let out = '', cur = '', bytes = 0;
+  for (const ch of line){ const b = enc.encode(ch).length; if (bytes + b > 73){ out += cur+'\r\n '; cur = ''; bytes = 1; } cur += ch; bytes += b; }
+  return out + cur;
+}
+$('btnIcs').onclick = () => {
+  const list = allPosts().filter(p => p.status !== 'published' && p.iso >= TODAY);
+  if (!list.length) return toast('앞으로 예정된 글이 없어요');
+  const stamp = new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z';
+  const L = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//ujusaek//blog-calendar//KO','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:우주색연필 블로그 발행'];
+  list.forEach(p => {
+    L.push('BEGIN:VEVENT','UID:'+p.id+'@ujusaekyeonpil','DTSTAMP:'+stamp,
+      'DTSTART;VALUE=DATE:'+p.iso.replace(/-/g,''),'DTEND;VALUE=DATE:'+addDays(p.iso,1).replace(/-/g,''),
+      'SUMMARY:'+icsEsc('[블로그] '+p.title),
+      'DESCRIPTION:'+icsEsc('키워드: '+p.keyword+'\n상태: '+ST_NAME[p.status]+'\n'+(p.shopping?'쇼핑링크 포함':'쇼핑링크 없음')+(p.memo?'\n'+p.memo:'')),
+      'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+icsEsc('오늘 블로그 글: '+p.title),'TRIGGER:PT9H','END:VALARM','END:VEVENT');
+  });
+  L.push('END:VCALENDAR');
+  download('우주색연필_발행일정.ics', L.map(icsFold).join('\r\n')+'\r\n', 'text/calendar;charset=utf-8');
+  toast(list.length+'편 일정 파일을 받았어요');
+};
+
+/* ============ 백업 / 복원 / 엑셀 / 초기화 ============ */
+$('btnBackup').onclick = () => { state.lastBackup = TODAY; save(); renderBackupInfo(); download('우주색연필_백업_'+TODAY+'.json', JSON.stringify(state, null, 1), 'application/json'); toast('백업 파일을 저장했어요'); };
+$('btnRestore').onclick = () => $('restoreFile').click();
+$('restoreFile').onchange = e => {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const s = JSON.parse(r.result);
+      const obj = x => x && typeof x === 'object' && !Array.isArray(x);
+      if (!s || s.v !== 2 || !obj(s.edits) || !Array.isArray(s.custom) || !obj(s.checks) || !obj(s.deleted)) throw 0;
+      if (s.custom.some(p => !p || typeof p.id !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(p.iso) || typeof p.title !== 'string')) throw 0;
+      if (!confirm('백업 파일로 바꿀까요? 지금 화면의 내용은 백업 내용으로 바뀌어요.')) return;
+      state = Object.assign(emptyState(), s); save(); setScale(state.scale || 18); renderAll(); toast('백업을 불러왔어요');
+    } catch(err){ toast('이 파일은 캘린더 백업 파일이 아니에요'); }
+    finally { e.target.value = ''; }
+  };
+  r.readAsText(f);
+};
+$('btnCsv').onclick = () => {
+  const q = v => { let s = String(v == null ? '' : v); if (/^[=+\-@]/.test(s)) s = "'" + s; return '"'+s.replace(/"/g,'""')+'"'; };
+  let csv = '\uFEFF날짜,분야,제목,키워드,상태,쇼핑링크,조회수,조회수 기록일,공감,댓글,주소,메모\r\n';
+  allPosts().forEach(p => { csv += [q(p.iso), q(CAT_NAME[p.cat]||p.cat), q(p.title), q(p.keyword), q(ST_NAME[viewSt(p)]), q(p.shopping?'포함':''), q(p.views), q(p.viewsAt), q(p.likes), q(p.comments), q(p.url), q(p.memo)].join(',')+'\r\n'; });
+  download('우주색연필_글목록_'+TODAY+'.csv', csv, 'text/csv;charset=utf-8');
+  toast('엑셀 파일을 받았어요');
+};
+$('btnReset').onclick = () => {
+  if (!confirm('입력한 숫자, 체크, 수정한 내용을 모두 지우고 처음 상태로 돌릴까요?\n(먼저 백업 파일을 저장해두면 안전해요)')) return;
+  sDel(KEY); state = emptyState(); save(); setScale(18); renderAll(); toast('처음 상태로 돌렸어요');
+};
+
+function renderBackupInfo(){
+  const b = state.lastBackup;
+  const el = $('backupInfo');
+  if (!b){ el.textContent = '⚠ 아직 백업한 적이 없어요.'; el.style.color = 'var(--red)'; }
+  else { const g = diffDays(b, TODAY); el.textContent = '마지막 백업: '+label(b)+(g >= 7 ? ' · 7일이 넘었어요. 다시 백업해주세요.' : ''); el.style.color = g >= 7 ? 'var(--red)' : 'var(--green)'; }
+}
+// 창을 켜둔 채 날짜가 바뀌면 새로고침해서 오늘 날짜로 맞춤
+document.addEventListener('visibilitychange', () => { if (!document.hidden && isoOf(new Date()) !== TODAY) location.reload(); });
+setInterval(() => { if (isoOf(new Date()) !== TODAY && !$('dlg').open) location.reload(); }, 60000);
+
+/* ============ 시작 ============ */
+save();
+renderBackupInfo();
+if (!canStore) $('storageWarn').classList.remove('hidden');
+setScale(state.scale || 18);
+if (!allPosts().some(p => p.iso.slice(0,7) === curYM)) curYM = '2026-09';
+renderAll();
+if (state._migrated){ toast('예전 캘린더에서 입력한 내용 '+state._migrated+'건을 가져왔어요'); delete state._migrated; save(); }
+</script>
+</body>
+</html>
