@@ -19,10 +19,10 @@
 
 1. **구글 시트 연결**
    1. Google 스프레드시트를 새로 만들고 `확장 프로그램 → Apps Script`를 엽니다.
-   2. `Code.gs` 내용을 붙여넣고 `FC_EMAIL`을 본인 이메일로 바꿉니다.
-   3. 함수 `setup`을 한 번 실행하고 권한을 허용합니다.
+   2. `Code.gs` 내용을 붙여넣습니다. 알림 이메일은 시트를 만든 구글 계정으로 자동 발송됩니다.
+   3. 함수 `setup`을 한 번 실행하고 권한을 허용합니다. 시트 3개(차량등록, 상담신청, 홈페이지상담)가 생깁니다.
    4. `배포 → 새 배포 → 웹 앱`을 선택합니다. 실행 사용자는 **나**, 액세스 권한은 **모든 사용자**로 설정합니다.
-   5. 발급된 URL을 `assets/config.js`의 `endpoint`에 넣습니다.
+   5. 발급된 URL을 두 곳에 넣습니다: `car/assets/config.js`의 `endpoint`, 루트 `index.html`의 `ENDPOINT`.
 2. **GitHub Pages 올리기**: `mangikok` 폴더 내용을 `jimlee2023.github.io` 저장소의 `car/` 폴더에 올립니다.
    → 주소: `https://jimlee2023.github.io/car/`
 3. **기존 상담 페이지에 연결**: 기존 페이지에 `https://jimlee2023.github.io/car/?utm_source=home` 버튼을 추가합니다.

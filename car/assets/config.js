@@ -14,7 +14,7 @@ window.MANGIKOK_CONFIG = {
 
   // 연결 주소
   homeUrl: "https://jimlee2023.github.io/", // 기존 상담 페이지
-  openChatUrl: "", // 카카오톡 오픈채팅 주소 (예: "https://open.kakao.com/o/xxxx")
+  openChatUrl: "https://open.kakao.com/o/sLpaz9Pi", // 카카오톡 오픈채팅
 
   // 데이터 저장 주소 (Google Apps Script 웹앱 URL). 비어 있으면 '미리보기 모드'로 동작
   endpoint: "",
