@@ -17,7 +17,7 @@ window.MANGIKOK_CONFIG = {
   openChatUrl: "https://open.kakao.com/o/sLpaz9Pi", // 카카오톡 오픈채팅
 
   // 데이터 저장 주소 (Google Apps Script 웹앱 URL). 비어 있으면 '미리보기 모드'로 동작
-  endpoint: "",
+  endpoint: "https://script.google.com/macros/s/AKfycbyvpI6O4DbNUIpWM6MW-zaAABc6IcdMJoAA8kWOq88gCj-Nfl2qlDXcmBj5saLpc9QZVQ/exec",
 
   // 기능 스위치
   features: {
